@@ -7,7 +7,7 @@ import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 import '../../../../../common/tuti_text.dart';
 import '../../../../../constants/color.dart';
 import '../../../../../constants/gaps.dart';
-import '../../../models/profile_model.dart';
+import '../../../../profile/models/profile_model.dart';
 
 class TuTiCardMobile extends StatelessWidget {
   const TuTiCardMobile({

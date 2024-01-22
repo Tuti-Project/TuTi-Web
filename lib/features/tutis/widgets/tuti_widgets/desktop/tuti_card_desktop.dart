@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
-import 'package:tuti/features/tutis/widgets/tuti_widgets/desktop/tuti_header_desktop.dart';
 
 import '../../../../../common/tuti_text.dart';
 import '../../../../../constants/color.dart';
 import '../../../../../constants/gaps.dart';
 import '../../../../../constants/media_query.dart';
-import '../../../models/profile_model.dart';
+import '../../../../profile/models/profile_model.dart';
 
 class TuTiCardDesktop extends StatelessWidget {
   const TuTiCardDesktop({
