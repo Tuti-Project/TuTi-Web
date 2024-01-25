@@ -53,7 +53,7 @@ class TuTiIconTitle extends StatelessWidget {
           child: RSizedBox(
             width: iconWidth,
             child: TuTiText(
-              context,작
+              context,
               title,
               style: TextStyle(
                 color: ColorConstants.primaryColor,
