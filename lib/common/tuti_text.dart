@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/constants/color.dart';
-import 'package:tuti/constants/media_query.dart';
 
 class TuTiText extends Text {
   final BuildContext context;
@@ -17,7 +16,7 @@ class TuTiText extends Text {
     Locale? locale,
     bool? softWrap,
     TextOverflow? overflow,
-    double? textScaleFactor,
+    TextScaler? textScaler,
     int? maxLines,
     String? semanticsLabel,
     TextWidthBasis? textWidthBasis,
@@ -32,7 +31,7 @@ class TuTiText extends Text {
           locale: locale,
           softWrap: softWrap,
           overflow: overflow,
-          textScaleFactor: textScaleFactor,
+          textScaler: textScaler,
           maxLines: maxLines,
           semanticsLabel: semanticsLabel,
           textWidthBasis: textWidthBasis,
@@ -47,12 +46,11 @@ class TuTiText extends Text {
     int? maxLines,
     TextOverflow? overflow,
   }) {
-    final mq = MQ(context);
     return TuTiText(
       context,
       data,
       style: TextStyle(
-        fontSize: mq.isMobile ? 20.sp : 36.sp,
+        fontSize: 20.sp,
         fontWeight: fontWeight ?? FontWeight.w600,
         color: color ?? ColorConstants.primaryColor,
       ),
@@ -69,12 +67,11 @@ class TuTiText extends Text {
     int? maxLines,
     TextOverflow? overflow,
   }) {
-    final mq = MQ(context);
     return TuTiText(
       context,
       data,
       style: TextStyle(
-        fontSize: mq.isMobile ? 15.sp : 24.sp,
+        fontSize: 15.sp,
         fontWeight: fontWeight ?? FontWeight.w600,
         color: color ?? ColorConstants.primaryColor,
       ),
@@ -91,12 +88,11 @@ class TuTiText extends Text {
     int? maxLines,
     TextOverflow? overflow,
   }) {
-    final mq = MQ(context);
     return TuTiText(
       context,
       data,
       style: TextStyle(
-        fontSize: mq.isMobile ? 10.sp : 16.sp,
+        fontSize: 10.sp,
         fontWeight: fontWeight ?? FontWeight.w600,
         color: color ?? ColorConstants.primaryColor,
       ),

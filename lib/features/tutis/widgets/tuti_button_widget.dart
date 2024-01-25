@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/tuti_text.dart';
 import '../../../constants/color.dart';
-import '../../../constants/media_query.dart';
 
 class TuTiButton extends StatelessWidget {
   const TuTiButton({
@@ -21,13 +20,12 @@ class TuTiButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MQ(context);
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: padding ??
             EdgeInsets.symmetric(
-              horizontal: mq.isMobile ? 35.w : 70.w,
-              vertical: mq.isMobile ? 20.h : 20.h,
+              horizontal: 35.w,
+              vertical: 20.h,
             ),
         backgroundColor: ColorConstants.primaryColor,
         shape: RoundedRectangleBorder(
@@ -40,7 +38,7 @@ class TuTiButton extends StatelessWidget {
         title,
         style: TextStyle(
           color: Colors.white,
-          fontSize: fontSize ?? (mq.isMobile ? 15.sp : 24.sp),
+          fontSize: fontSize ?? 15.sp,
           fontWeight: FontWeight.w600,
         ),
       ),

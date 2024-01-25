@@ -15,37 +15,33 @@ class TuTiBottomMobile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       elevation: 0,
-      child: Padding(
-        padding:
-            EdgeInsets.only(top: 10.h, bottom: 30.h, left: 30.w, right: 30.w),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: TuTiButton(
-                title: '퍼스널브랜딩',
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.h,
-                  horizontal: 20.w,
-                ),
-                onPressed: () {
-                  context.pushNamed(HomeScreen.routeName);
-                },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TuTiButton(
+              title: '퍼스널 브랜딩',
+              padding: EdgeInsets.symmetric(
+                vertical: 10.h,
+                horizontal: 20.w,
               ),
+              onPressed: () {
+                context.pushNamed(HomeScreen.routeName);
+              },
             ),
-            Gaps.w10,
-            Expanded(
-              child: TuTiButton(
-                title: '마이페이지',
-                padding: EdgeInsets.symmetric(
-                  vertical: 10.h,
-                  horizontal: 20.w,
-                ),
-                onPressed: () {},
+          ),
+          Gaps.w10,
+          Expanded(
+            child: TuTiButton(
+              title: '마이페이지',
+              padding: EdgeInsets.symmetric(
+                vertical: 10.h,
+                horizontal: 20.w,
               ),
+              onPressed: () {},
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
