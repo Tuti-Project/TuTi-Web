@@ -26,7 +26,7 @@ class TuTiText extends Text {
           key: key,
           style: style,
           strutStyle: strutStyle,
-          textAlign: textAlign,
+          textAlign: textAlign ?? TextAlign.center,
           textDirection: textDirection,
           locale: locale,
           softWrap: softWrap,
@@ -45,6 +45,7 @@ class TuTiText extends Text {
     Color? color,
     int? maxLines,
     TextOverflow? overflow,
+    TextAlign? textAlign,
   }) {
     return TuTiText(
       context,
@@ -56,6 +57,7 @@ class TuTiText extends Text {
       ),
       maxLines: maxLines,
       overflow: overflow,
+      textAlign: textAlign ?? TextAlign.center,
     );
   }
 
@@ -66,6 +68,7 @@ class TuTiText extends Text {
     Color? color,
     int? maxLines,
     TextOverflow? overflow,
+    TextAlign? textAlign,
   }) {
     return TuTiText(
       context,
@@ -77,6 +80,7 @@ class TuTiText extends Text {
       ),
       maxLines: maxLines,
       overflow: overflow,
+      textAlign: textAlign ?? TextAlign.center,
     );
   }
 
@@ -87,6 +91,7 @@ class TuTiText extends Text {
     Color? color,
     int? maxLines,
     TextOverflow? overflow,
+    TextAlign? textAlign,
   }) {
     return TuTiText(
       context,
@@ -98,6 +103,7 @@ class TuTiText extends Text {
       ),
       maxLines: maxLines,
       overflow: overflow,
+      textAlign: textAlign ?? TextAlign.center,
     );
   }
 }

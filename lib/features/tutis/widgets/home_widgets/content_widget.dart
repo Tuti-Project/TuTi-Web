@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tuti/features/auth/views/join_screen.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 
 import '../../../../common/tuti_icon_title.dart';
 import '../../../../common/tuti_text.dart';
 import '../../../../constants/color.dart';
 import '../../../../constants/gaps.dart';
+import '../../../auth/views/join_screen.dart';
+import '../../../auth/views/login_screen.dart';
 
 class ContentWidget extends StatefulWidget {
   const ContentWidget({Key? key}) : super(key: key);
@@ -18,11 +19,12 @@ class ContentWidget extends StatefulWidget {
 
 class _ContentWidgetState extends State<ContentWidget> {
   // 로그인 함수
-  void _login() {}
+  void _login() {
+    context.pushNamed(LoginScreen.routeName);
+  }
 
   // 회원가입
   void _register() {
-    // 화면 이동
     context.pushNamed(JoinScreen.routeName);
   }
 
