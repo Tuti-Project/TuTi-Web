@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/features/auth/services/auth_service.dart';
 import 'package:tuti/features/auth/widgets/auth_form_field.dart';
@@ -7,17 +8,17 @@ import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 import '../../../constants/color.dart';
 import '../../../constants/gaps.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   static const String routeName = "login";
   static const String routePath = "/login";
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late Map<String, String> formData = {};
@@ -27,8 +28,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
 
-        await AuthService()
-            .login(context, formData['email']!, formData['password']!);
+        final authService = ref.read(authServiceProvider);
+        await authService.login(
+            context, formData['email']!, formData['password']!);
       }
     }
   }

@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:tuti/common/interceptor.dart';
 import 'package:tuti/constants/color.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
 
 class AuthService {
   final _dio = Dio();
-  AuthService() {
+  AuthService(Dio dio) {
     _dio.options = BaseOptions(
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 5),
@@ -72,3 +74,8 @@ class AuthService {
     }
   }
 }
+
+final authServiceProvider = Provider((ref) {
+  final dio = ref.read(dioProvider);
+  return AuthService(dio);
+});

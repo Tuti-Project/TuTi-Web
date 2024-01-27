@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
@@ -20,17 +21,17 @@ enum Terms {
   marketingTermsEmail,
 }
 
-class JoinPrivateScreen extends StatefulWidget {
+class JoinPrivateScreen extends ConsumerStatefulWidget {
   const JoinPrivateScreen({super.key});
 
   static const String routeName = "joinPrivate";
   static const String routePath = "/joinPrivate";
 
   @override
-  State<JoinPrivateScreen> createState() => _JoinPrivateScreenState();
+  ConsumerState<JoinPrivateScreen> createState() => _JoinPrivateScreenState();
 }
 
-class _JoinPrivateScreenState extends State<JoinPrivateScreen> {
+class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -169,7 +170,8 @@ class _JoinPrivateScreenState extends State<JoinPrivateScreen> {
         birthDay: _selectedMonth.toString() + _selectedDay.toString(),
         gender: _gender,
       );
-      await AuthService().signUp(context, userProfileModel);
+      final authService = ref.read(authServiceProvider);
+      await authService.signUp(context, userProfileModel);
       if (context.mounted) {
         context.pushNamed(TuTiScreen.routeName);
       }
