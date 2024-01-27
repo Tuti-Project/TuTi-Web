@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/features/profile/views/profile_screen.dart';
 import 'package:tuti/features/tutis/views/home_screen.dart';
@@ -12,19 +14,19 @@ final routerProvider = Provider((ref) {
   return GoRouter(
     initialLocation: TuTiScreen.routePath,
     redirect: (context, state) async {
-      // if (kIsWeb) {
-      //   return null;
-      // }
-      // const storage = FlutterSecureStorage();
-      // final accessToken = await storage.read(key: 'accessToken');
-      // if (accessToken == null) {
-      // if (state.subloc != JoinPrivateScreen.routePath &&
-      //     state.subloc != JoinScreen.routePath &&
-      //     state.subloc != LoginScreen.routePath &&
-      //     state.subloc != HomeScreen.routePath) {
-      //   return HomeScreen.routePath;
-      // }
-      // }
+      if (kIsWeb) {
+        return null;
+      }
+      const storage = FlutterSecureStorage();
+      final accessToken = await storage.read(key: 'accessToken');
+      if (accessToken == null) {
+        if (state.subloc != JoinPrivateScreen.routePath &&
+            state.subloc != JoinScreen.routePath &&
+            state.subloc != LoginScreen.routePath &&
+            state.subloc != HomeScreen.routePath) {
+          return HomeScreen.routePath;
+        }
+      }
       return null;
     },
     routes: [

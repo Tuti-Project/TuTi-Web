@@ -18,7 +18,8 @@ class TuTiScreen extends StatelessWidget {
         children: [
           Gaps.h14,
           TuTiHeaderMobile(),
-          Gaps.h5, TuTiCardMobile(),
+          Gaps.h5,
+          TuTiCardMobile(),
         ],
       ),
       bottomNavigationBar: TuTiBottomMobile(),

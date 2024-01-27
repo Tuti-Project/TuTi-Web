@@ -49,7 +49,6 @@ class TuTiIconTitle extends StatelessWidget {
         ),
         Positioned(
           top: 16.h,
-          left: leftPosition,
           child: RSizedBox(
             width: iconWidth,
             child: TuTiText(

@@ -173,7 +173,7 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
       final authService = ref.read(authServiceProvider);
       await authService.signUp(context, userProfileModel);
       if (context.mounted) {
-        context.pushNamed(TuTiScreen.routeName);
+        context.goNamed(TuTiScreen.routeName);
       }
       // 로그인 로직
     }

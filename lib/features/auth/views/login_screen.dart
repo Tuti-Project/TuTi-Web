@@ -120,7 +120,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   Gaps.h40,
                   TuTiButton(
-                    title: '개인회원 가입하기',
+                    title: '로그인',
                     padding: EdgeInsets.symmetric(
                       horizontal: 35.w,
                     ),

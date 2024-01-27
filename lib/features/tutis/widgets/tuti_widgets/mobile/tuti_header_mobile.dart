@@ -20,7 +20,10 @@ class TuTiHeaderMobile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const TuTiIconTitle(title: 'tuti'),
+          TuTiIconTitle(
+            title: 'tuti',
+            fontSize: 20.sp,
+          ),
           Gaps.w14,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,6 +37,7 @@ class TuTiHeaderMobile extends StatelessWidget {
                 context,
                 '노는 것부터 스펙까지\n'
                 '트티가 다양한 길을 제안해줍니다!',
+                textAlign: TextAlign.start,
               ),
             ],
           ),

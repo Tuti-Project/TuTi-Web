@@ -1,82 +1,105 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/common/tuti_icon.dart';
+import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 
 import '../../../../../common/tuti_text.dart';
 import '../../../../../constants/color.dart';
 import '../../../../../constants/gaps.dart';
-import '../../../../profile/models/profile_model.dart';
+import '../../../../profile/services/member_service.dart';
 
-class TuTiCardMobile extends StatelessWidget {
+class TuTiCardMobile extends ConsumerStatefulWidget {
   const TuTiCardMobile({
     super.key,
   });
 
-  // keywords 의 길이가 4자 이상일 때 줄 바꿔서 String 으로 반환
-  String _getKeyword(String keyword) {
-    // keyword 의 길이가 4자 이상일 때 줄 바꿔서 반환
-    if (keyword.length > 4) {
-      return '${keyword.substring(0, 4)}\n${keyword.substring(4)}';
-    }
-    return keyword;
+  @override
+  ConsumerState<TuTiCardMobile> createState() => _TuTiCardMobileState();
+}
+
+class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
+  Future<List<MemberModel>> getMembersBuilder() async {
+    final memberService = ref.read(memberServiceProvider);
+    return await memberService.getMembers(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.separated(
-        itemCount: profiles.length,
-        separatorBuilder: (context, index) {
-          return Gaps.h32;
+      child: RefreshIndicator.adaptive(
+        onRefresh: () async {
+          await getMembersBuilder();
         },
-        itemBuilder: (context, index) {
-          final profile = profiles[index];
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.sp),
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: 250.h,
-                maxHeight: 250.h,
-              ),
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    width: 2,
-                    color: ColorConstants.primaryColor,
-                  ),
-                  borderRadius: BorderRadius.circular(45),
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildLeftColumn(context, profile),
-                  Gaps.w24,
-                  _buildRightColumn(context, profile),
-                ],
-              ),
-            ),
-          );
-        },
+        child: FutureBuilder<List<MemberModel>>(
+            future: getMembersBuilder(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('데이터를 불러오는데 실패했습니다.'),
+                );
+              }
+              final members = snapshot.data!;
+              return ListView.separated(
+                itemCount: members.length,
+                separatorBuilder: (context, index) {
+                  return Gaps.h32;
+                },
+                itemBuilder: (context, index) {
+                  final member = members[index];
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.sp),
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minHeight: 250.h,
+                        maxHeight: 250.h,
+                      ),
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                            width: 2,
+                            color: ColorConstants.primaryColor,
+                          ),
+                          borderRadius: BorderRadius.circular(45),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildLeftColumn(context, member),
+                          Gaps.w24,
+                          _buildRightColumn(context, member),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
       ),
     );
   }
 
-  Widget _buildLeftColumn(BuildContext context, Map<String, Object> profile) {
+  Widget _buildLeftColumn(BuildContext context, MemberModel member) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildSwitchRow(context, profile),
+          _buildSwitchRow(context, member),
           Gaps.h10,
           TuTiText.small(
             context,
-            profile['isOn'] as bool ? '매칭 가능' : '재직 중',
+            member.applyMatchingStatus == 'ON' ? '매칭 가능' : '재직 중',
             fontWeight: FontWeight.w900,
           ),
           Gaps.h6,
@@ -84,13 +107,13 @@ class TuTiCardMobile extends StatelessWidget {
           Gaps.h8,
           TuTiText.small(
             context,
-            profile['name'].toString(),
+            member.name,
             fontWeight: FontWeight.w800,
           ),
           Gaps.h12,
           TuTiText.small(
             context,
-            profile['university'].toString(),
+            member.university,
             fontWeight: FontWeight.w800,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -100,13 +123,13 @@ class TuTiCardMobile extends StatelessWidget {
     );
   }
 
-  Widget _buildRightColumn(BuildContext context, Map<String, Object> profile) {
+  Widget _buildRightColumn(BuildContext context, MemberModel member) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildKeywordsWrap(profile),
+          _buildKeywordsWrap(member),
           TuTiButton(
             title: '더보기',
             onPressed: () {},
@@ -121,7 +144,7 @@ class TuTiCardMobile extends StatelessWidget {
     );
   }
 
-  Widget _buildSwitchRow(BuildContext context, Map<String, Object> profile) {
+  Widget _buildSwitchRow(BuildContext context, MemberModel member) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,13 +153,13 @@ class TuTiCardMobile extends StatelessWidget {
           scale: 0.6,
           child: CupertinoSwitch(
             activeColor: ColorConstants.primaryColor,
-            value: profile['isOn'] as bool,
+            value: member.applyMatchingStatus == 'ON' ? true : false,
             onChanged: (value) {},
           ),
         ),
         TuTiText.small(
           context,
-          profile['isOn'] as bool ? 'on' : 'off',
+          member.applyMatchingStatus == 'ON' ? 'on' : 'off',
           fontWeight: FontWeight.w900,
         ),
       ],
@@ -160,7 +183,7 @@ class TuTiCardMobile extends StatelessWidget {
     );
   }
 
-  Widget _buildKeywordsWrap(Map<String, Object> profile) {
+  Widget _buildKeywordsWrap(MemberModel member) {
     return Expanded(
       child: Wrap(
         alignment: WrapAlignment.center,
@@ -168,9 +191,9 @@ class TuTiCardMobile extends StatelessWidget {
         runAlignment: WrapAlignment.center,
         spacing: 10.sp,
         children: [
-          for (var keyword in profile['keywords'] as List<String>)
+          for (var jobTag in member.jobTags)
             TuTiIcon(
-              title: _getKeyword(keyword),
+              title: jobTag,
               fontSize: 11.sp,
               iconHeight: 100.h,
             ),
