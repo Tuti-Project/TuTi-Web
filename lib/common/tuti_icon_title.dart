@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/common/tuti_text.dart';
 
 import '../constants/color.dart';
-import '../constants/media_query.dart';
 
 class TuTiIconTitle extends StatelessWidget {
   const TuTiIconTitle({
@@ -18,12 +17,11 @@ class TuTiIconTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MQ(context);
-    final double baseFontSize = mq.isMobile ? 18.sp : 40.sp;
+    final double baseFontSize = 18.sp;
     final double adjustedFontSize = fontSize ?? baseFontSize;
 
     // 계산된 텍스트 길이에 따라 가운데 정렬 조절
-    final double iconWidth = mq.isMobile ? 55 : 110;
+    final double iconWidth = 55.w;
 
     // TextPainter 대신에 RichText를 사용하여 텍스트 너비 계산
     final TextSpan span = TextSpan(
@@ -46,12 +44,11 @@ class TuTiIconTitle extends StatelessWidget {
       children: [
         Image.asset(
           assetName,
-          width: mq.isMobile ? 55 : 110,
-          height: mq.isMobile ? 70 : 140,
+          width: 55.w,
+          height: 70.w,
         ),
         Positioned(
-          top: mq.isMobile ? 16.h : 30.h,
-          left: mq.isMobile ? leftPosition : 22.w,
+          top: 16.h,
           child: RSizedBox(
             width: iconWidth,
             child: TuTiText(
