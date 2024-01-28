@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:tuti/constants/color.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
-import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
 import '../../../common/interceptor.dart';
 
@@ -33,11 +32,10 @@ class AuthService {
       );
       if (response.statusCode == 200) {
         final accessToken = response.data['data']['accessToken'];
-        Logger().i("accessToken : $accessToken");
         const storage = FlutterSecureStorage();
         await storage.write(key: 'accessToken', value: accessToken);
         if (context.mounted) {
-          context.goNamed(TuTiScreen.routeName);
+          context.go('/tuti');
         }
       } else {
         if (context.mounted) {
@@ -91,6 +89,5 @@ class AuthService {
 
 final authServiceProvider = Provider((ref) {
   final dio = ref.read(dioProvider);
-  // final dio = Dio();
   return AuthService(dio);
 });

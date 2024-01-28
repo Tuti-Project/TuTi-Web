@@ -39,100 +39,90 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return ConstraintsScaffold(
-      child: Stack(
-        children: [
-          Image.asset(
-            'assets/images/home_mobile.jpg',
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20.w,
-              vertical: 20.h,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Gaps.h20,
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20.w,
+          vertical: 20.h,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Gaps.h20,
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ),
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      width: 2,
+                      color: ColorConstants.primaryColor,
                     ),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 2,
-                          color: ColorConstants.primaryColor,
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: AuthFormField(
-                      onEditingComplete: () {
-                        if (formData['email'] != null &&
-                            formData['email']!.isNotEmpty) {
-                          FocusScope.of(context).nextFocus();
-                        }
-                      },
-                      onSaved: (newValue) => formData['email'] = newValue!,
-                      validator: (value) {
-                        if (value != null && value.isEmpty) {
-                          return '이메일 아이디를 입력해주세요';
-                        }
-                        return null;
-                      },
-                      hintText: '이메일 아이디',
-                      keyboardType: TextInputType.emailAddress,
-                    ),
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                  Gaps.h40,
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                    ),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 2,
-                          color: ColorConstants.primaryColor,
-                        ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: AuthFormField(
-                      onEditingComplete: _onSubmitTap,
-                      onSaved: (newValue) => formData['password'] = newValue!,
-                      validator: (value) {
-                        if (value != null && value.isEmpty) {
-                          return '비밀번호를 입력해주세요';
-                        }
-                        return null;
-                      },
-                      hintText: '비밀번호',
-                      obscureText: true,
-                    ),
-                  ),
-                  Gaps.h40,
-                  TuTiButton(
-                    title: '로그인',
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 35.w,
-                    ),
-                    fontSize: 15.sp,
-                    onPressed: _onSubmitTap,
-                  ),
-                ],
+                ),
+                child: AuthFormField(
+                  onEditingComplete: () {
+                    if (formData['email'] != null &&
+                        formData['email']!.isNotEmpty) {
+                      FocusScope.of(context).nextFocus();
+                    }
+                  },
+                  onSaved: (newValue) => formData['email'] = newValue!,
+                  validator: (value) {
+                    if (value != null && value.isEmpty) {
+                      return '이메일 아이디를 입력해주세요';
+                    }
+                    return null;
+                  },
+                  hintText: '이메일 아이디',
+                  keyboardType: TextInputType.emailAddress,
+                ),
               ),
-            ),
+              Gaps.h40,
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ),
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      width: 2,
+                      color: ColorConstants.primaryColor,
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                child: AuthFormField(
+                  onEditingComplete: _onSubmitTap,
+                  onSaved: (newValue) => formData['password'] = newValue!,
+                  validator: (value) {
+                    if (value != null && value.isEmpty) {
+                      return '비밀번호를 입력해주세요';
+                    }
+                    return null;
+                  },
+                  hintText: '비밀번호',
+                  obscureText: true,
+                ),
+              ),
+              Gaps.h40,
+              TuTiButton(
+                title: '로그인',
+                padding: EdgeInsets.symmetric(
+                  horizontal: 35.w,
+                ),
+                fontSize: 15.sp,
+                onPressed: _onSubmitTap,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

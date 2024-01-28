@@ -12,26 +12,13 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const background = 'assets/images/home_mobile.jpg';
-
-    return ConstraintsScaffold(
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              background,
-            ),
-            fit: BoxFit.cover,
-            alignment: Alignment.bottomCenter,
-          ),
-        ),
-        child: const Column(
-          children: [
-            ContentWidget(),
-            Spacer(),
-            FooterWidget(),
-          ],
-        ),
+    return const ConstraintsScaffold(
+      child: Column(
+        children: [
+          ContentWidget(),
+          Spacer(),
+          FooterWidget(),
+        ],
       ),
     );
   }

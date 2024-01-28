@@ -113,7 +113,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           Gaps.h12,
           TuTiText.small(
             context,
-            member.university,
+            member.university == '' ? '미입력' : member.university,
             fontWeight: FontWeight.w800,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -184,6 +184,10 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   }
 
   Widget _buildKeywordsWrap(MemberModel member) {
+    var jobTags = member.jobTags;
+    if (jobTags.isEmpty) {
+      jobTags = ['미입력', '미입력'];
+    }
     return Expanded(
       child: Wrap(
         alignment: WrapAlignment.center,
@@ -191,12 +195,16 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         runAlignment: WrapAlignment.center,
         spacing: 10.sp,
         children: [
-          for (var jobTag in member.jobTags)
-            TuTiIcon(
-              title: jobTag,
-              fontSize: 11.sp,
-              iconHeight: 100.h,
-            ),
+          TuTiIcon(
+            title: jobTags[0],
+            fontSize: 11.sp,
+            iconHeight: 100.h,
+          ),
+          TuTiIcon(
+            title: jobTags[1],
+            fontSize: 11.sp,
+            iconHeight: 100.h,
+          ),
         ],
       ),
     );

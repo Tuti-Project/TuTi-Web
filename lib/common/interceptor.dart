@@ -14,28 +14,17 @@ class CustomInterceptor extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    // 토큰이 있으면 헤더에 추가
-    if (options.headers['accessToken'] == 'true') {
-      // 헤더 삭제
-      options.headers.remove('accessToken');
+    // 헤더 삭제
+    options.headers.remove('accessToken');
 
-      final accessToken = await storage.read(key: 'accessToken');
+    final accessToken = await storage.read(key: 'accessToken');
 
-      // 실제 토큰으로 대체
-      options.headers.addAll({
-        'authorization': 'Bearer $accessToken',
-      });
-    } else if (options.headers['refreshToken'] == 'true') {
-      // 헤더 삭제
-      options.headers.remove('refreshToken');
+    // 실제 토큰으로 대체
+    options.headers.addAll({
+      'authorization': 'Bearer $accessToken',
+      'Access-Control-Allow-Origin': '*',
+    });
 
-      final refreshToken = await storage.read(key: 'refreshToken');
-
-      // 실제 토큰으로 대체
-      options.headers.addAll({
-        'authorization': 'Bearer $refreshToken',
-      });
-    }
     super.onRequest(options, handler);
   }
 }

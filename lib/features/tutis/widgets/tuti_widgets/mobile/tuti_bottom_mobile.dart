@@ -3,13 +3,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../constants/gaps.dart';
+import '../../../../profile/views/profile_screen.dart';
 import '../../../views/home_screen.dart';
 import '../../tuti_button_widget.dart';
 
-class TuTiBottomMobile extends StatelessWidget {
+class TuTiBottomMobile extends StatefulWidget {
   const TuTiBottomMobile({
     super.key,
   });
+
+  @override
+  State<TuTiBottomMobile> createState() => _TuTiBottomMobileState();
+}
+
+class _TuTiBottomMobileState extends State<TuTiBottomMobile> {
+  void _onTapMyPage() {
+    context.pushNamed(ProfileScreen.routeName);
+  }
+
+  void _onTapPersonalBranding() {
+    context.pushNamed(HomeScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +52,7 @@ class TuTiBottomMobile extends StatelessWidget {
                 vertical: 10.h,
                 horizontal: 20.w,
               ),
-              onPressed: () {},
+              onPressed: _onTapMyPage,
             ),
           ),
         ],

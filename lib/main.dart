@@ -51,6 +51,12 @@ class TuTi extends ConsumerWidget {
             primaryColor: ColorConstants.primaryColor,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             fontFamily: 'Gothic A1',
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              selectedItemColor: ColorConstants.primaryColor,
+              unselectedItemColor: Colors.grey,
+            ),
           ),
           debugShowCheckedModeBanner: false,
         ),

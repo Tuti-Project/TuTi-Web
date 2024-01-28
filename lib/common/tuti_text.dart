@@ -92,15 +92,17 @@ class TuTiText extends Text {
     int? maxLines,
     TextOverflow? overflow,
     TextAlign? textAlign,
+    TextStyle? style,
   }) {
     return TuTiText(
       context,
       data,
-      style: TextStyle(
-        fontSize: 10.sp,
-        fontWeight: fontWeight ?? FontWeight.w600,
-        color: color ?? ColorConstants.primaryColor,
-      ),
+      style: style ??
+          TextStyle(
+            fontSize: 10.sp,
+            fontWeight: fontWeight ?? FontWeight.w600,
+            color: color ?? ColorConstants.primaryColor,
+          ),
       maxLines: maxLines,
       overflow: overflow,
       textAlign: textAlign ?? TextAlign.center,

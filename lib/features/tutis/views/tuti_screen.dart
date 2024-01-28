@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
 
 import '../../../constants/gaps.dart';
-import '../widgets/tuti_widgets/mobile/tuti_bottom_mobile.dart';
 import '../widgets/tuti_widgets/mobile/tuti_card_mobile.dart';
 import '../widgets/tuti_widgets/mobile/tuti_header_mobile.dart';
 
@@ -15,16 +14,13 @@ class TuTiScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const ConstraintsScaffold(
-      child: Scaffold(
-        body: Column(
-          children: [
-            Gaps.h14,
-            TuTiHeaderMobile(),
-            Gaps.h5,
-            TuTiCardMobile(),
-          ],
-        ),
-        bottomNavigationBar: TuTiBottomMobile(),
+      child: Column(
+        children: [
+          Gaps.h14,
+          TuTiHeaderMobile(),
+          Gaps.h5,
+          TuTiCardMobile(),
+        ],
       ),
     );
   }
