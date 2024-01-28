@@ -2,11 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/logger.dart';
+import 'package:tuti/features/profile/models/proifle_model.dart';
 import 'package:tuti/features/tutis/views/home_screen.dart';
 import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
 import 'common/main_navigation_screen.dart';
+import 'common/token_manager.dart';
 import 'features/auth/views/join_private_screen.dart';
 import 'features/auth/views/join_screen.dart';
 import 'features/auth/views/login_screen.dart';
@@ -17,17 +18,26 @@ final routerProvider = Provider((ref) {
     initialLocation: TuTiScreen.routePath,
     redirect: (context, state) async {
       if (kIsWeb) {
+        String? token = await TokenManager.getToken();
+        if (token == null || token.isEmpty) {
+          if (state.subloc != JoinPrivateScreen.routePath &&
+              state.subloc != JoinScreen.routePath &&
+              state.subloc != LoginScreen.routePath &&
+              state.subloc != HomeScreen.routePath) {
+            return HomeScreen.routePath;
+          }
+        }
         return null;
-      }
-      const storage = FlutterSecureStorage();
-      final accessToken = await storage.read(key: 'accessToken');
-      if (accessToken == null) {
-        Logger().i('accessToken: ${accessToken == null}');
-        if (state.subloc != JoinPrivateScreen.routePath &&
-            state.subloc != JoinScreen.routePath &&
-            state.subloc != LoginScreen.routePath &&
-            state.subloc != HomeScreen.routePath) {
-          return HomeScreen.routePath;
+      } else {
+        const storage = FlutterSecureStorage();
+        final accessToken = await storage.read(key: 'accessToken');
+        if (accessToken == null) {
+          if (state.subloc != JoinPrivateScreen.routePath &&
+              state.subloc != JoinScreen.routePath &&
+              state.subloc != LoginScreen.routePath &&
+              state.subloc != HomeScreen.routePath) {
+            return HomeScreen.routePath;
+          }
         }
       }
       return null;
@@ -60,7 +70,10 @@ final routerProvider = Provider((ref) {
           GoRoute(
             name: EditProfileScreen.routeName,
             path: EditProfileScreen.routePath,
-            builder: (context, state) => const EditProfileScreen(),
+            builder: (context, state) {
+              final profile = state.extra as ProfileModel;
+              return EditProfileScreen(profile: profile);
+            },
           ),
         ],
       ),

@@ -1,22 +1,24 @@
 class ProfileModel {
-  int memberId;
-  String name;
-  int age;
-  String gender;
+  int? memberId;
+  String? name;
+  int? age;
+  String? gender;
   String university;
   String major;
+  String? imageUrl;
   String description;
   List<String> jobTags;
   List<String> skillTags;
   String applyMatchingStatus;
 
   ProfileModel({
-    required this.memberId,
-    required this.name,
-    required this.age,
-    required this.gender,
+    this.memberId,
+    this.name,
+    this.age,
+    this.gender,
     required this.university,
     required this.major,
+    this.imageUrl,
     required this.description,
     required this.jobTags,
     required this.skillTags,
@@ -30,6 +32,7 @@ class ProfileModel {
         gender: '',
         university: '',
         major: '',
+        imageUrl: '',
         description: '',
         jobTags: [],
         skillTags: [],
@@ -44,6 +47,7 @@ class ProfileModel {
       gender: json['gender'],
       university: json['university'],
       major: json['major'],
+      imageUrl: json['imageUrl'],
       description: json['description'],
       jobTags: List<String>.from(json['jobTags']),
       skillTags: List<String>.from(json['skillTags']),
@@ -53,12 +57,9 @@ class ProfileModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'memberId': memberId,
-      'name': name,
-      'age': age,
-      'gender': gender,
       'university': university,
       'major': major,
+      'imageUrl': 'string',
       'description': description,
       'jobTags': jobTags,
       'skillTags': skillTags,

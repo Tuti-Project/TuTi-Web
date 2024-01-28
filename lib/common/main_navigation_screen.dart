@@ -74,8 +74,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
               onTap: _onTap,
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.bar_chart,
+                  // Icon(
+                  //   Icons.bar_chart,
+                  //   color: _selectedIndex == 0
+                  //       ? ColorConstants.primaryColor
+                  //       : Colors.grey,
+                  // ),
+                  icon: Image.asset(
+                    'assets/images/personalBranding.png',
+                    width: 24.w,
                     color: _selectedIndex == 0
                         ? ColorConstants.primaryColor
                         : Colors.grey,
@@ -83,8 +90,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                   label: '퍼스널브랜딩',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.people_rounded,
+                  icon: Image.asset(
+                    'assets/images/home.png',
+                    width: 24.w,
                     color: _selectedIndex == 1
                         ? ColorConstants.primaryColor
                         : Colors.grey,
@@ -92,8 +100,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                   label: '트티 홈',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.person,
+                  icon: Image.asset(
+                    'assets/images/myPage.png',
+                    width: 24.w,
                     color: _selectedIndex == 2
                         ? ColorConstants.primaryColor
                         : Colors.grey,

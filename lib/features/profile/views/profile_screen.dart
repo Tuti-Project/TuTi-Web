@@ -27,13 +27,42 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  final _descriptionController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _descriptionController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  ProfileModel _profile = ProfileModel.empty();
+  final List<String> _selectedJob = [];
+  final List<String> _selectedSkill = [];
+  final List<String> _selectedDay = [];
+  bool _isMatching = true;
+
   void _editProfile() {
-    context.pushNamed(EditProfileScreen.routePath, params: {'tab': 'profile'});
+    context.pushNamed(
+      EditProfileScreen.routePath,
+      params: {'tab': 'profile'},
+      extra: _profile,
+    );
   }
 
   Future<ProfileModel> getProfileBuilder() async {
     final profileService = ref.read(profileServiceProvider);
-    return await profileService.getProfile(context);
+    final profile = await profileService.getProfile(context);
+    _selectedJob.addAll(profile.jobTags);
+    _selectedSkill.addAll(profile.skillTags);
+    _isMatching = profile.applyMatchingStatus == "ON" ? true : false;
+    // _selectedDay.addAll(profile.availableDays);
+
+    _profile = profile;
+
+    _descriptionController.text = profile.description;
+
+    return profile;
   }
 
   @override
@@ -59,138 +88,161 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ),
         child: RefreshIndicator.adaptive(
-          onRefresh: () async {
-            await getProfileBuilder();
-          },
-          child: SingleChildScrollView(
-            child: FutureBuilder<ProfileModel>(
-                future: getProfileBuilder(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('데이터를 불러오는데 실패했습니다.'),
-                    );
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: TuTiText.large(
-                              context,
-                              '전연주 트티 반갑습니다!',
-                            ),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              elevation: 0,
-                            ),
-                            onPressed: _editProfile,
-                            child: TuTiText.small(
-                              context,
-                              '수정',
-                              style: TextStyle(
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.grey,
-                                decoration: TextDecoration.underline,
+          displacement: 50,
+          edgeOffset: 10,
+          onRefresh: () async => await getProfileBuilder(),
+          child: Expanded(
+            child: SingleChildScrollView(
+              child: FutureBuilder<ProfileModel>(
+                  future: getProfileBuilder(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text('데이터를 불러오는데 실패했습니다.'),
+                      );
+                    }
+                    final profile = snapshot.data!;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: TuTiText.large(
+                                context,
+                                '${profile.name} 트티 반갑습니다!',
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Gaps.h10,
-                      Row(
-                        children: [
-                          _buildCircleAvatar(),
-                          Gaps.w20,
-                          const Column(
-                            children: [
-                              TuTiProfile(title: '이름', data: '전연주'),
-                              Gaps.h5,
-                              TuTiProfile(title: '나이', data: '전연주'),
-                              Gaps.h5,
-                              TuTiProfile(title: '성별', data: '전연주'),
-                              Gaps.h5,
-                              TuTiProfile(title: '학교', data: '전연주'),
-                              Gaps.h5,
-                              TuTiProfile(title: '학과', data: '전연주'),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Gaps.h20,
-                      TuTiText.medium(context, '관심직무',
-                          color: ColorConstants.profileColor),
-                      Gaps.h10,
-                      const IgnorePointer(
-                        child: TuTiTextFormField(
-                          hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                elevation: 0,
+                              ),
+                              onPressed: _editProfile,
+                              child: TuTiText.small(
+                                context,
+                                '수정',
+                                style: TextStyle(
+                                  fontSize: 10.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Gaps.h20,
-                      TuTiText.medium(context, '활용 능력',
-                          color: ColorConstants.profileColor),
-                      Gaps.h10,
-                      const IgnorePointer(
-                        child: TuTiTextFormField(
-                          hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                        Gaps.h10,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            _buildCircleAvatar(),
+                            Gaps.w20,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TuTiProfile(
+                                    title: '이름', data: profile.name ?? "-"),
+                                Gaps.h5,
+                                TuTiProfile(
+                                    title: '나이', data: profile.age.toString()),
+                                Gaps.h5,
+                                TuTiProfile(
+                                    title: '성별', data: profile.gender ?? "-"),
+                                Gaps.h5,
+                                TuTiProfile(
+                                    title: '학교',
+                                    data: profile.university.isEmpty
+                                        ? "-"
+                                        : profile.university),
+                                Gaps.h5,
+                                TuTiProfile(
+                                    title: '학과',
+                                    data: profile.major.isEmpty
+                                        ? "-"
+                                        : profile.major),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                      Gaps.h20,
-                      TuTiText.medium(context, '상세 설명 및 자격증',
-                          color: ColorConstants.profileColor),
-                      Gaps.h10,
-                      const IgnorePointer(
-                        child: TuTiTextFormField(
-                          hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                        ),
-                      ),
-                      Gaps.h20,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TuTiText.medium(context, '직무매칭 인턴 신청 여부',
-                              color: ColorConstants.profileColor),
-                          Transform.scale(
-                            scale: 0.8,
-                            child: CupertinoSwitch(
-                              activeColor: ColorConstants.primaryColor,
-                              value: true,
-                              onChanged: (value) {},
+                        Gaps.h20,
+                        TuTiText.medium(context, '관심직무',
+                            color: ColorConstants.profileColor),
+                        Gaps.h10,
+                        if (profile.jobTags.isEmpty)
+                          const IgnorePointer(
+                            child: TuTiTextFormField(
+                              hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
                             ),
                           ),
-                        ],
-                      ),
-                      Gaps.h40,
-                      TuTiText.medium(context, '대면 업무 가능 시간',
-                          color: ColorConstants.profileColor),
-                      Gaps.h10,
-                      // 월 ~ 일 까지 선택할 수 있는 컴포넌트
-                      // 감싸는 위젯 wrap
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TuTiDay(day: '월'),
-                          TuTiDay(day: '화'),
-                          TuTiDay(day: '수'),
-                          TuTiDay(day: '목'),
-                          TuTiDay(day: '금'),
-                          TuTiDay(day: '토'),
-                          TuTiDay(day: '일'),
-                        ],
-                      ),
-                    ],
-                  );
-                }),
+                        if (profile.jobTags.isNotEmpty) _jobs(),
+                        Gaps.h20,
+                        TuTiText.medium(context, '활용 능력',
+                            color: ColorConstants.profileColor),
+                        Gaps.h10,
+                        if (profile.skillTags.isEmpty)
+                          const IgnorePointer(
+                            child: TuTiTextFormField(
+                              hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                            ),
+                          ),
+                        if (profile.skillTags.isNotEmpty) _skill(),
+                        Gaps.h20,
+                        TuTiText.medium(context, '상세 설명 및 자격증',
+                            color: ColorConstants.profileColor),
+                        Gaps.h10,
+                        IgnorePointer(
+                          child: TuTiTextFormField(
+                            hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                            controller: _descriptionController,
+                          ),
+                        ),
+                        Gaps.h20,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TuTiText.medium(context, '직무매칭 인턴 신청 여부',
+                                color: ColorConstants.profileColor),
+                            IgnorePointer(
+                              child: Transform.scale(
+                                scale: 0.8,
+                                child: CupertinoSwitch(
+                                  activeColor: ColorConstants.primaryColor,
+                                  value: _isMatching,
+                                  onChanged: (value) {},
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gaps.h40,
+                        TuTiText.medium(context, '대면 업무 가능 시간',
+                            color: ColorConstants.profileColor),
+                        Gaps.h10,
+                        // 월 ~ 일 까지 선택할 수 있는 컴포넌트
+                        // 감싸는 위젯 wrap
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TuTiDay(day: '월'),
+                            TuTiDay(day: '화'),
+                            TuTiDay(day: '수'),
+                            TuTiDay(day: '목'),
+                            TuTiDay(day: '금'),
+                            TuTiDay(day: '토'),
+                            TuTiDay(day: '일'),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
+            ),
           ),
         ),
       ),
@@ -226,6 +278,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               vertical: 5.h,
             ),
             decoration: BoxDecoration(
+              color: _selectedJob.contains(job)
+                  ? ColorConstants.primaryColor
+                  : Colors.white,
               border: Border.all(
                 width: 1,
                 color: ColorConstants.primaryColor,
@@ -235,7 +290,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: TuTiText.small(
               context,
               job,
-              color: ColorConstants.primaryColor,
+              color: _selectedJob.contains(job)
+                  ? Colors.white
+                  : ColorConstants.primaryColor,
             ),
           ),
       ],
@@ -254,6 +311,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               vertical: 5.h,
             ),
             decoration: BoxDecoration(
+              color: _selectedSkill.contains(skill)
+                  ? ColorConstants.primaryColor
+                  : Colors.white,
               border: Border.all(
                 width: 1,
                 color: ColorConstants.primaryColor,
@@ -263,7 +323,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: TuTiText.small(
               context,
               skill,
-              color: ColorConstants.primaryColor,
+              color: _selectedSkill.contains(skill)
+                  ? Colors.white
+                  : ColorConstants.primaryColor,
             ),
           ),
       ],

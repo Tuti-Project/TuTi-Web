@@ -11,8 +11,10 @@ import 'constants/color.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  const nativeAppKey = '4b00f616a81b54e28b1ec7f62cc4ca62';
-  KakaoSdk.init(nativeAppKey: nativeAppKey);
+  // const nativeAppKey = '4b00f616a81b54e28b1ec7f62cc4ca62';
+  // KakaoSdk.init(nativeAppKey: nativeAppKey);
+  const javaScriptAppKey = 'e8672714e4155899ffebc63eccc5e671';
+  KakaoSdk.init(javaScriptAppKey: javaScriptAppKey);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

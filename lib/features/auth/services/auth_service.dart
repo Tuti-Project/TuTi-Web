@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +9,7 @@ import 'package:tuti/constants/color.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
 
 import '../../../common/interceptor.dart';
+import '../../../common/token_manager.dart';
 
 class AuthService {
   final Dio _dio;
@@ -32,8 +34,12 @@ class AuthService {
       );
       if (response.statusCode == 200) {
         final accessToken = response.data['data']['accessToken'];
-        const storage = FlutterSecureStorage();
-        await storage.write(key: 'accessToken', value: accessToken);
+        if (kIsWeb) {
+          await TokenManager.saveToken(accessToken);
+        } else {
+          const storage = FlutterSecureStorage();
+          await storage.write(key: 'accessToken', value: accessToken);
+        }
         if (context.mounted) {
           context.go('/tuti');
         }

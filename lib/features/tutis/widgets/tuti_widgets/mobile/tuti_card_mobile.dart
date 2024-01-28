@@ -30,9 +30,9 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   Widget build(BuildContext context) {
     return Expanded(
       child: RefreshIndicator.adaptive(
-        onRefresh: () async {
-          await getMembersBuilder();
-        },
+        displacement: 50,
+        edgeOffset: 10,
+        onRefresh: () async => await getMembersBuilder(),
         child: FutureBuilder<List<MemberModel>>(
             future: getMembersBuilder(),
             builder: (context, snapshot) {
@@ -113,7 +113,9 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           Gaps.h12,
           TuTiText.small(
             context,
-            member.university == '' ? '미입력' : member.university,
+            member.university == ''
+                ? '미입력'
+                : '${member.university} / ${member.major}',
             fontWeight: FontWeight.w800,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -149,12 +151,14 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Transform.scale(
-          scale: 0.6,
-          child: CupertinoSwitch(
-            activeColor: ColorConstants.primaryColor,
-            value: member.applyMatchingStatus == 'ON' ? true : false,
-            onChanged: (value) {},
+        IgnorePointer(
+          child: Transform.scale(
+            scale: 0.6,
+            child: CupertinoSwitch(
+              activeColor: ColorConstants.primaryColor,
+              value: member.applyMatchingStatus == 'ON' ? true : false,
+              onChanged: (value) {},
+            ),
           ),
         ),
         TuTiText.small(
@@ -186,7 +190,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   Widget _buildKeywordsWrap(MemberModel member) {
     var jobTags = member.jobTags;
     if (jobTags.isEmpty) {
-      jobTags = ['미입력', '미입력'];
+      jobTags = ['미입력'];
     }
     return Expanded(
       child: Wrap(
@@ -195,16 +199,12 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         runAlignment: WrapAlignment.center,
         spacing: 10.sp,
         children: [
-          TuTiIcon(
-            title: jobTags[0],
-            fontSize: 11.sp,
-            iconHeight: 100.h,
-          ),
-          TuTiIcon(
-            title: jobTags[1],
-            fontSize: 11.sp,
-            iconHeight: 100.h,
-          ),
+          for (var job in jobTags)
+            TuTiIcon(
+              title: job,
+              fontSize: 11.sp,
+              iconHeight: 100.h,
+            ),
         ],
       ),
     );

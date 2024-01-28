@@ -18,7 +18,12 @@ class TuTiProfile extends StatelessWidget {
       children: [
         TuTiText.medium(context, title),
         Gaps.w20,
-        TuTiText.medium(context, data),
+        TuTiText.medium(
+          context,
+          data,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
       ],
     );
   }

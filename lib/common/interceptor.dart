@@ -1,14 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:tuti/common/token_manager.dart';
 
 class CustomInterceptor extends Interceptor {
   final Ref ref;
-  final FlutterSecureStorage storage;
+  final FlutterSecureStorage? storage;
+  final Future<String?>? token;
 
   CustomInterceptor({
-    required this.storage,
     required this.ref,
+    this.storage,
+    this.token,
   });
 
   @override
@@ -17,7 +21,12 @@ class CustomInterceptor extends Interceptor {
     // 헤더 삭제
     options.headers.remove('accessToken');
 
-    final accessToken = await storage.read(key: 'accessToken');
+    String? accessToken = '';
+    if (kIsWeb) {
+      accessToken = await TokenManager.getToken();
+    } else {
+      accessToken = await storage?.read(key: 'accessToken');
+    }
 
     // 실제 토큰으로 대체
     options.headers.addAll({
@@ -31,9 +40,16 @@ class CustomInterceptor extends Interceptor {
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
-  const storage = FlutterSecureStorage();
-  dio.interceptors.add(
-    CustomInterceptor(storage: storage, ref: ref),
-  );
+  if (kIsWeb) {
+    final token = TokenManager.getToken();
+    dio.interceptors.add(
+      CustomInterceptor(ref: ref, token: token),
+    );
+  } else {
+    const storage = FlutterSecureStorage();
+    dio.interceptors.add(
+      CustomInterceptor(ref: ref, storage: storage),
+    );
+  }
   return dio;
 });

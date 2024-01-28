@@ -1,34 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
+import 'package:tuti/features/profile/models/proifle_model.dart';
 
 import '../../../common/tuti_text.dart';
 import '../../../constants/color.dart';
 import '../../../constants/gaps.dart';
 import '../../../constants/string.dart';
+import '../services/proifle_service.dart';
 import '../widgets/tuti_profile.dart';
+import '../widgets/tuti_textfield.dart';
 import '../widgets/tuti_textformfield.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class EditProfileScreen extends ConsumerStatefulWidget {
+  const EditProfileScreen({
+    super.key,
+    required this.profile,
+  });
+
+  final ProfileModel profile;
 
   static const String routeName = "editProfile";
   static const String routePath = "editProfile";
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _detailController = TextEditingController();
-  final TextEditingController _companyController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
+class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+  late final TextEditingController _detailController =
+      TextEditingController(text: widget.profile.description);
+  late final TextEditingController _companyController =
+      TextEditingController(text: '_companyController');
+  late final TextEditingController _timeController =
+      TextEditingController(text: '_timeController');
+  late final TextEditingController _universityController =
+      TextEditingController(text: widget.profile.university);
+  late final TextEditingController _majorController = TextEditingController(
+      text: widget.profile.major.isEmpty ? "-" : widget.profile.major);
 
-  String _detail = '';
+  late String _detail = widget.profile.description;
   String _company = '';
   String _time = '';
+  late String _university = widget.profile.university;
+  late String _major = widget.profile.major;
 
   @override
   void initState() {
@@ -48,6 +65,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _time = _timeController.text;
       });
     });
+    _universityController.addListener(() {
+      setState(() {
+        _university = _universityController.text;
+      });
+    });
+    _majorController.addListener(() {
+      setState(() {
+        _major = _majorController.text;
+      });
+    });
   }
 
   @override
@@ -55,18 +82,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _detailController.dispose();
     _companyController.dispose();
     _timeController.dispose();
+    _universityController.dispose();
+    _majorController.dispose();
     super.dispose();
   }
 
-  bool _isMatching = true;
+  late bool _isMatching =
+      widget.profile.applyMatchingStatus == "ON" ? true : false;
 
-  String _selectedJob = '';
-  final List<String> _selectedSkill = [];
-  final List<String> _selectedDay = [];
+  late final List<String> _selectedJob = widget.profile.jobTags;
+  late final List<String> _selectedSkill = widget.profile.skillTags;
+  late final List<String> _selectedDay = [];
 
   void _onSelectedJob(String job) {
     setState(() {
-      _selectedJob = job;
+      setState(() {
+        if (_selectedJob.contains(job)) {
+          _selectedJob.remove(job);
+        } else {
+          if (_selectedJob.length >= 2) return;
+          _selectedJob.add(job);
+        }
+      });
     });
   }
 
@@ -91,8 +128,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  void _submit() {
-    context.pop();
+  void _submit() async {
+    final profileService = ref.read(profileServiceProvider);
+    final profile = ProfileModel(
+      university: _university,
+      major: _major,
+      jobTags: _selectedJob,
+      skillTags: _selectedSkill,
+      description: _detail,
+      applyMatchingStatus: _isMatching ? "ON" : "OFF",
+    );
+    await profileService.updateProfile(context, profile);
   }
 
   @override
@@ -149,20 +195,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               Gaps.h10,
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _buildCircleAvatar(),
                   Gaps.w20,
-                  const Column(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TuTiProfile(title: '이름', data: '전연주'),
+                      TuTiProfile(
+                          title: '이름', data: widget.profile.name ?? "-"),
                       Gaps.h5,
-                      TuTiProfile(title: '나이', data: '전연주'),
+                      TuTiProfile(
+                          title: '나이', data: widget.profile.age.toString()),
                       Gaps.h5,
-                      TuTiProfile(title: '성별', data: '전연주'),
+                      TuTiProfile(
+                          title: '성별', data: widget.profile.gender ?? "-"),
                       Gaps.h5,
-                      TuTiProfile(title: '학교', data: '전연주'),
+                      TuTiTextField(
+                        title: '학교',
+                        controller: _universityController,
+                        hintText: widget.profile.university.isEmpty
+                            ? "-"
+                            : widget.profile.university,
+                      ),
                       Gaps.h5,
-                      TuTiProfile(title: '학과', data: '전연주'),
+                      TuTiTextField(
+                        title: '학과',
+                        controller: _majorController,
+                        hintText: widget.profile.major.isEmpty
+                            ? "-"
+                            : widget.profile.major,
+                      ),
                     ],
                   ),
                 ],
@@ -261,7 +324,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 vertical: 5.h,
               ),
               decoration: BoxDecoration(
-                color: _selectedJob == job
+                color: _selectedJob.contains(job)
                     ? ColorConstants.primaryColor
                     : Colors.white,
                 border: Border.all(
@@ -273,7 +336,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: TuTiText.small(
                 context,
                 job,
-                color: _selectedJob == job
+                color: _selectedJob.contains(job)
                     ? Colors.white
                     : ColorConstants.primaryColor,
               ),
