@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tuti/common/constraints_scaffold.dart';
 
 import '../../../constants/gaps.dart';
 import '../widgets/tuti_widgets/mobile/tuti_bottom_mobile.dart';
@@ -14,22 +14,17 @@ class TuTiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(
-          maxWidth: 700.w,
+    return const ConstraintsScaffold(
+      child: Scaffold(
+        body: Column(
+          children: [
+            Gaps.h14,
+            TuTiHeaderMobile(),
+            Gaps.h5,
+            TuTiCardMobile(),
+          ],
         ),
-        child: const Scaffold(
-          body: Column(
-            children: [
-              Gaps.h14,
-              TuTiHeaderMobile(),
-              Gaps.h5,
-              TuTiCardMobile(),
-            ],
-          ),
-          bottomNavigationBar: TuTiBottomMobile(),
-        ),
+        bottomNavigationBar: TuTiBottomMobile(),
       ),
     );
   }
