@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
@@ -10,6 +11,8 @@ import '../../../../../common/tuti_text.dart';
 import '../../../../../constants/color.dart';
 import '../../../../../constants/gaps.dart';
 import '../../../../profile/services/member_service.dart';
+import '../../../../profile/services/proifle_service.dart';
+import '../../../views/tuti_detail_screen.dart';
 
 class TuTiCardMobile extends ConsumerStatefulWidget {
   const TuTiCardMobile({
@@ -23,7 +26,21 @@ class TuTiCardMobile extends ConsumerStatefulWidget {
 class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   Future<List<MemberModel>> getMembersBuilder() async {
     final memberService = ref.read(memberServiceProvider);
-    return await memberService.getMembers(context);
+    final members = await memberService.getMembers(context);
+    return members;
+  }
+
+  void _getDetailProfile(int memberId) async {
+    final profileService = ref.read(profileServiceProvider);
+    final profile =
+        await profileService.getProfile(context, memberId: memberId);
+
+    if (context.mounted) {
+      context.pushNamed(
+        TuTiDetailScreen.routeName,
+        extra: profile,
+      );
+    }
   }
 
   @override
@@ -134,7 +151,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           _buildKeywordsWrap(member),
           TuTiButton(
             title: '더보기',
-            onPressed: () {},
+            onPressed: () => _getDetailProfile(member.memberId),
             padding: EdgeInsets.symmetric(
               horizontal: 35.w,
             ),

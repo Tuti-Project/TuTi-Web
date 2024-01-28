@@ -8,7 +8,6 @@ import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/gaps.dart';
 import 'package:tuti/features/profile/models/proifle_model.dart';
 import 'package:tuti/features/profile/services/proifle_service.dart';
-import 'package:tuti/features/profile/widgets/tuti_day.dart';
 import 'package:tuti/features/profile/widgets/tuti_profile.dart';
 
 import '../../../constants/color.dart';
@@ -28,10 +27,18 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _descriptionController = TextEditingController();
+  final _companyController = TextEditingController();
+  final _timeController = TextEditingController();
   @override
   void initState() {
     super.initState();
     _descriptionController.addListener(() {
+      setState(() {});
+    });
+    _companyController.addListener(() {
+      setState(() {});
+    });
+    _timeController.addListener(() {
       setState(() {});
     });
   }
@@ -44,23 +51,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   void _editProfile() {
     context.pushNamed(
-      EditProfileScreen.routePath,
+      EditProfileScreen.routeName,
       params: {'tab': 'profile'},
       extra: _profile,
     );
   }
 
   Future<ProfileModel> getProfileBuilder() async {
+    _selectedJob.clear();
+    _selectedSkill.clear();
+    _selectedDay.clear();
+    _profile = ProfileModel.empty();
+
     final profileService = ref.read(profileServiceProvider);
     final profile = await profileService.getProfile(context);
+
     _selectedJob.addAll(profile.jobTags);
     _selectedSkill.addAll(profile.skillTags);
+
+    for (final day in profile.availableDays) {
+      switch (day) {
+        case "MON":
+          _selectedDay.add("월");
+          break;
+        case "TUE":
+          _selectedDay.add("화");
+          break;
+        case "WED":
+          _selectedDay.add("수");
+          break;
+        case "THU":
+          _selectedDay.add("목");
+          break;
+        case "FRI":
+          _selectedDay.add("금");
+          break;
+        case "SAT":
+          _selectedDay.add("토");
+          break;
+        case "SUN":
+          _selectedDay.add("일");
+          break;
+      }
+    }
+
     _isMatching = profile.applyMatchingStatus == "ON" ? true : false;
-    // _selectedDay.addAll(profile.availableDays);
 
     _profile = profile;
 
     _descriptionController.text = profile.description;
+    _companyController.text = profile.matchingDescription;
+    _timeController.text = profile.availableHours ?? "";
 
     return profile;
   }
@@ -113,11 +154,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
-                              child: TuTiText.large(
-                                context,
-                                '${profile.name} 트티 반갑습니다!',
-                              ),
+                            TuTiText.large(
+                              context,
+                              '${profile.name} 트티 반갑습니다!',
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -221,23 +260,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                           ],
                         ),
-                        Gaps.h40,
+                        if (!_isMatching) Gaps.h10,
+                        if (!_isMatching)
+                          IgnorePointer(
+                            child: TuTiTextFormField(
+                              controller: _companyController,
+                              hintText: '근무 중인 회사를 입력해주세요!',
+                              limitLength: 30,
+                            ),
+                          ),
+                        Gaps.h20,
                         TuTiText.medium(context, '대면 업무 가능 시간',
                             color: ColorConstants.profileColor),
                         Gaps.h10,
-                        // 월 ~ 일 까지 선택할 수 있는 컴포넌트
-                        // 감싸는 위젯 wrap
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TuTiDay(day: '월'),
-                            TuTiDay(day: '화'),
-                            TuTiDay(day: '수'),
-                            TuTiDay(day: '목'),
-                            TuTiDay(day: '금'),
-                            TuTiDay(day: '토'),
-                            TuTiDay(day: '일'),
-                          ],
+                        _days(),
+                        Gaps.h10,
+                        IgnorePointer(
+                          child: TuTiTextFormField(
+                            controller: _timeController,
+                            hintText: '근무 가능 시간을 입력해주세요!',
+                            limitLength: 30,
+                          ),
                         ),
                       ],
                     );
@@ -324,6 +367,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               context,
               skill,
               color: _selectedSkill.contains(skill)
+                  ? Colors.white
+                  : ColorConstants.primaryColor,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _days() {
+    return Wrap(
+      spacing: 10.w,
+      runSpacing: 10.h,
+      children: [
+        for (final day in daysConstant)
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10.w,
+              vertical: 5.h,
+            ),
+            decoration: BoxDecoration(
+              color: _selectedDay.contains(day)
+                  ? ColorConstants.primaryColor
+                  : Colors.white,
+              border: Border.all(
+                width: 1,
+                color: ColorConstants.primaryColor,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TuTiText.small(
+              context,
+              day,
+              color: _selectedDay.contains(day)
                   ? Colors.white
                   : ColorConstants.primaryColor,
             ),

@@ -10,6 +10,9 @@ class ProfileModel {
   List<String> jobTags;
   List<String> skillTags;
   String applyMatchingStatus;
+  List<String> availableDays;
+  String matchingDescription;
+  String? availableHours;
 
   ProfileModel({
     this.memberId,
@@ -23,12 +26,15 @@ class ProfileModel {
     required this.jobTags,
     required this.skillTags,
     required this.applyMatchingStatus,
+    required this.availableDays,
+    required this.matchingDescription,
+    this.availableHours,
   });
 
   factory ProfileModel.empty() => ProfileModel(
-        memberId: 0,
+        memberId: -1,
         name: '',
-        age: 0,
+        age: -1,
         gender: '',
         university: '',
         major: '',
@@ -37,6 +43,8 @@ class ProfileModel {
         jobTags: [],
         skillTags: [],
         applyMatchingStatus: '',
+        availableDays: [],
+        matchingDescription: '',
       );
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +60,9 @@ class ProfileModel {
       jobTags: List<String>.from(json['jobTags']),
       skillTags: List<String>.from(json['skillTags']),
       applyMatchingStatus: json['applyMatchingStatus'],
+      availableDays: List<String>.from(json['availableDays']),
+      matchingDescription: json['matchingDescription'],
+      availableHours: json['availableHours'],
     );
   }
 
@@ -64,6 +75,19 @@ class ProfileModel {
       'jobTags': jobTags,
       'skillTags': skillTags,
       'applyMatchingStatus': applyMatchingStatus,
+      'availableDays': availableDays,
+      'matchingDescription': matchingDescription,
+      'availableHours': availableHours,
     };
   }
+}
+
+enum Day {
+  MON,
+  TUE,
+  WED,
+  THU,
+  FRI,
+  SAT,
+  SUN,
 }

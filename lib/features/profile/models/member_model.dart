@@ -1,4 +1,5 @@
 class MemberModel {
+  int memberId;
   String name;
   String university;
   String major;
@@ -7,6 +8,7 @@ class MemberModel {
   List<String> jobTags;
 
   MemberModel({
+    required this.memberId,
     required this.name,
     required this.university,
     required this.major,
@@ -17,6 +19,7 @@ class MemberModel {
 
   factory MemberModel.fromJson(Map<String, dynamic> json) {
     return MemberModel(
+      memberId: json['memberId'],
       name: json['name'],
       university: json['university'],
       major: json['major'],

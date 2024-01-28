@@ -33,17 +33,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   late final TextEditingController _detailController =
       TextEditingController(text: widget.profile.description);
   late final TextEditingController _companyController =
-      TextEditingController(text: '_companyController');
+      TextEditingController(text: widget.profile.matchingDescription);
   late final TextEditingController _timeController =
-      TextEditingController(text: '_timeController');
+      TextEditingController(text: widget.profile.availableHours);
   late final TextEditingController _universityController =
       TextEditingController(text: widget.profile.university);
   late final TextEditingController _majorController = TextEditingController(
       text: widget.profile.major.isEmpty ? "-" : widget.profile.major);
 
   late String _detail = widget.profile.description;
-  String _company = '';
-  String _time = '';
+  late String _company = widget.profile.matchingDescription;
+  late String? _time = widget.profile.availableHours;
   late String _university = widget.profile.university;
   late String _major = widget.profile.major;
 
@@ -75,6 +75,31 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         _major = _majorController.text;
       });
     });
+    for (final day in widget.profile.availableDays) {
+      switch (day) {
+        case "MON":
+          _selectedDay.add("월");
+          break;
+        case "TUE":
+          _selectedDay.add("화");
+          break;
+        case "WED":
+          _selectedDay.add("수");
+          break;
+        case "THU":
+          _selectedDay.add("목");
+          break;
+        case "FRI":
+          _selectedDay.add("금");
+          break;
+        case "SAT":
+          _selectedDay.add("토");
+          break;
+        case "SUN":
+          _selectedDay.add("일");
+          break;
+      }
+    }
   }
 
   @override
@@ -130,6 +155,34 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   void _submit() async {
     final profileService = ref.read(profileServiceProvider);
+
+    List<String> selectedDay = [];
+    for (final day in _selectedDay) {
+      switch (day) {
+        case "월":
+          selectedDay.add("MON");
+          break;
+        case "화":
+          selectedDay.add("TUE");
+          break;
+        case "수":
+          selectedDay.add("WED");
+          break;
+        case "목":
+          selectedDay.add("THU");
+          break;
+        case "금":
+          selectedDay.add("FRI");
+          break;
+        case "토":
+          selectedDay.add("SAT");
+          break;
+        case "일":
+          selectedDay.add("SUN");
+          break;
+      }
+    }
+
     final profile = ProfileModel(
       university: _university,
       major: _major,
@@ -137,6 +190,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       skillTags: _selectedSkill,
       description: _detail,
       applyMatchingStatus: _isMatching ? "ON" : "OFF",
+      availableDays: selectedDay,
+      matchingDescription: _company,
+      availableHours: _time,
     );
     await profileService.updateProfile(context, profile);
   }

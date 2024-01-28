@@ -19,9 +19,15 @@ class ProfileService {
 
   static const String baseUrl = 'http://52.79.243.200:8080';
 
-  Future<ProfileModel> getProfile(BuildContext context) async {
+  Future<ProfileModel> getProfile(BuildContext context, {int? memberId}) async {
     try {
-      final response = await _dio.get('$baseUrl/my-page');
+      Response? response;
+      if (memberId != null) {
+        response =
+            await _dio.get('$baseUrl/member/{memberId}?memberId=$memberId');
+      } else {
+        response = await _dio.get('$baseUrl/my-page');
+      }
       if (response.statusCode == 200) {
         final result = response.data['data'];
         final profile = ProfileModel.fromJson(result);

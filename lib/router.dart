@@ -12,6 +12,7 @@ import 'features/auth/views/join_private_screen.dart';
 import 'features/auth/views/join_screen.dart';
 import 'features/auth/views/login_screen.dart';
 import 'features/profile/views/edit_profile_screen.dart';
+import 'features/tutis/views/tuti_detail_screen.dart';
 
 final routerProvider = Provider((ref) {
   return GoRouter(
@@ -76,6 +77,14 @@ final routerProvider = Provider((ref) {
             },
           ),
         ],
+      ),
+      GoRoute(
+        name: TuTiDetailScreen.routeName,
+        path: TuTiDetailScreen.routePath,
+        builder: (context, state) {
+          final profile = state.extra as ProfileModel;
+          return TuTiDetailScreen(profile: profile);
+        },
       ),
     ],
   );
