@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 class TokenManager {
   static const String _tokenKey = 'auth_token';
