@@ -133,7 +133,11 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
                       TuTiContainer(
                         text: profile.description,
                       ),
-                    if (profile.jobTags.isNotEmpty) TuTiJobs(profile: profile),
+                    if (profile.jobTags.isNotEmpty)
+                      TuTiJobs(
+                        profile: profile,
+                        getMember: true,
+                      ),
                     Gaps.h20,
                     TuTiText.medium(context, '활용 능력',
                         color: ColorConstants.profileColor),
@@ -143,7 +147,10 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
                         text: profile.description,
                       ),
                     if (profile.skillTags.isNotEmpty)
-                      TuTiSkills(profile: profile),
+                      TuTiSkills(
+                        profile: profile,
+                        getMember: true,
+                      ),
                     Gaps.h20,
                     TuTiText.medium(context, '상세 설명 및 자격증',
                         color: ColorConstants.profileColor),

@@ -10,18 +10,23 @@ class TuTiSkills extends StatelessWidget {
   const TuTiSkills({
     super.key,
     required this.profile,
+    this.getMember = false,
   });
 
   final ProfileModel profile;
+  final bool getMember;
 
   @override
   Widget build(BuildContext context) {
     final selectedSkill = profile.skillTags;
+    final filteredSkill =
+        skillConstant.where((skill) => selectedSkill.contains(skill)).toList();
+    final skills = getMember ? filteredSkill : skillConstant;
     return Wrap(
       spacing: 10.w,
       runSpacing: 10.h,
       children: [
-        for (final skill in skillConstant)
+        for (final skill in skills)
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: 10.w,

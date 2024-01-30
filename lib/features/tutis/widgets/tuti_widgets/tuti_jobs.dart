@@ -10,18 +10,23 @@ class TuTiJobs extends StatelessWidget {
   const TuTiJobs({
     super.key,
     required this.profile,
+    this.getMember = false,
   });
 
   final ProfileModel profile;
+  final bool getMember;
 
   @override
   Widget build(BuildContext context) {
     final selectedJob = profile.jobTags;
+    final filteredJob =
+        jobConstant.where((job) => selectedJob.contains(job)).toList();
+    final jobs = getMember ? filteredJob : jobConstant;
     return Wrap(
       spacing: 10.w,
       runSpacing: 10.h,
       children: [
-        for (final job in jobConstant)
+        for (final job in jobs)
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: 10.w,
