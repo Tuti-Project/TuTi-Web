@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../constants/gaps.dart';
-import '../../../../profile/views/profile_screen.dart';
-import '../../../views/home_screen.dart';
-import '../../tuti_button_widget.dart';
+import '../../../../constants/gaps.dart';
+import '../../../profile/views/profile_screen.dart';
+import '../../views/home_screen.dart';
+import '../tuti_button_widget.dart';
 
 class TuTiBottomMobile extends StatefulWidget {
   const TuTiBottomMobile({
@@ -19,10 +19,6 @@ class TuTiBottomMobile extends StatefulWidget {
 class _TuTiBottomMobileState extends State<TuTiBottomMobile> {
   void _onTapMyPage() {
     context.pushNamed(ProfileScreen.routeName);
-  }
-
-  void _onTapPersonalBranding() {
-    context.pushNamed(HomeScreen.routeName);
   }
 
   @override

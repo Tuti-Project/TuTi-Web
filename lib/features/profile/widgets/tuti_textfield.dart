@@ -43,7 +43,7 @@ class TuTiTextField extends StatelessWidget {
             isDense: true,
             contentPadding: EdgeInsets.zero,
             constraints: BoxConstraints(
-              maxWidth: 130.w,
+              maxWidth: 150.w,
             ),
             hintText: hintText,
             hintStyle: TextStyle(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
 
 import '../../../constants/gaps.dart';
-import '../widgets/tuti_widgets/mobile/tuti_card_mobile.dart';
-import '../widgets/tuti_widgets/mobile/tuti_header_mobile.dart';
+import '../widgets/tuti_widgets/tuti_card_mobile.dart';
+import '../widgets/tuti_widgets/tuti_header_mobile.dart';
 
 class TuTiScreen extends StatelessWidget {
   const TuTiScreen({Key? key}) : super(key: key);

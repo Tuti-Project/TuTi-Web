@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../common/tuti_icon_title.dart';
-import '../../../../../common/tuti_text.dart';
-import '../../../../../constants/gaps.dart';
+import '../../../../common/tuti_icon_title.dart';
+import '../../../../common/tuti_text.dart';
+import '../../../../constants/gaps.dart';
 
 class TuTiHeaderMobile extends StatelessWidget {
   const TuTiHeaderMobile({

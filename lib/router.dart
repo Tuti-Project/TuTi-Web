@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tuti/features/profile/models/proifle_model.dart';
 import 'package:tuti/features/tutis/views/home_screen.dart';
 import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
@@ -72,8 +71,7 @@ final routerProvider = Provider((ref) {
             name: EditProfileScreen.routeName,
             path: EditProfileScreen.routePath,
             builder: (context, state) {
-              final profile = state.extra as ProfileModel;
-              return EditProfileScreen(profile: profile);
+              return const EditProfileScreen();
             },
           ),
         ],

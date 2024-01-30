@@ -7,11 +7,11 @@ import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 
-import '../../../../../common/tuti_text.dart';
-import '../../../../../constants/color.dart';
-import '../../../../../constants/gaps.dart';
-import '../../../../profile/services/member_service.dart';
-import '../../../views/tuti_detail_screen.dart';
+import '../../../../common/tuti_text.dart';
+import '../../../../constants/color.dart';
+import '../../../../constants/gaps.dart';
+import '../../../profile/services/member_service.dart';
+import '../../views/tuti_detail_screen.dart';
 
 class TuTiCardMobile extends ConsumerStatefulWidget {
   const TuTiCardMobile({

@@ -8,10 +8,12 @@ import 'package:tuti/constants/gaps.dart';
 import 'package:tuti/features/profile/models/proifle_model.dart';
 import 'package:tuti/features/profile/widgets/tuti_container.dart';
 import 'package:tuti/features/profile/widgets/tuti_profile.dart';
+import 'package:tuti/features/tutis/widgets/tuti_widgets/tuti_days.dart';
+import 'package:tuti/features/tutis/widgets/tuti_widgets/tuti_jobs.dart';
 
 import '../../../constants/color.dart';
-import '../../../constants/string.dart';
 import '../../profile/services/proifle_service.dart';
+import '../widgets/tuti_widgets/tuti_skills.dart';
 
 class TuTiDetailScreen extends ConsumerStatefulWidget {
   const TuTiDetailScreen({
@@ -35,30 +37,6 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
     final profile =
     await profileService.getProfile(context, memberId: widget.memberId);
     return profile;
-  }
-
-  List<String> sortedDay(List<String> selectedDay) {
-    final sortedDay = selectedDay.map((day) {
-      switch (day) {
-        case 'MON':
-          return '월';
-        case 'TUE':
-          return '화';
-        case 'WED':
-          return '수';
-        case 'THU':
-          return '목';
-        case 'FRI':
-          return '금';
-        case 'SAT':
-          return '토';
-        case 'SUN':
-          return '일';
-        default:
-          return '';
-      }
-    }).toList();
-    return sortedDay;
   }
 
   @override
@@ -152,7 +130,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
                     TuTiContainer(
                       text: profile.description,
                     ),
-                  if (profile.jobTags.isNotEmpty) _jobs(profile),
+                  if (profile.jobTags.isNotEmpty) TuTiJobs(profile: profile),
                   Gaps.h20,
                   TuTiText.medium(context, '활용 능력',
                       color: ColorConstants.profileColor),
@@ -161,7 +139,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
                     TuTiContainer(
                       text: profile.description,
                     ),
-                  if (profile.skillTags.isNotEmpty) _skill(profile),
+                  if (profile.skillTags.isNotEmpty) TuTiSkills(profile: profile),
                   Gaps.h20,
                   TuTiText.medium(context, '상세 설명 및 자격증',
                       color: ColorConstants.profileColor),
@@ -196,7 +174,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
                   TuTiText.medium(context, '대면 업무 가능 시간',
                       color: ColorConstants.profileColor),
                   Gaps.h10,
-                  _days(profile),
+                  TuTiDays(profile: profile),
                   Gaps.h10,
                   TuTiContainer(
                     text: profile.availableHours ?? "",
@@ -224,109 +202,6 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
         backgroundImage: AssetImage('assets/images/fruit.png'),
         backgroundColor: Colors.transparent,
       ),
-    );
-  }
-
-  Widget _jobs(ProfileModel profile) {
-    final selectedJob = profile.jobTags;
-    return Wrap(
-      spacing: 10.w,
-      runSpacing: 10.h,
-      children: [
-        for (final job in jobConstant)
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 5.h,
-            ),
-            decoration: BoxDecoration(
-              color: selectedJob.contains(job)
-                  ? ColorConstants.primaryColor
-                  : Colors.white,
-              border: Border.all(
-                width: 1,
-                color: ColorConstants.primaryColor,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TuTiText.small(
-              context,
-              job,
-              color: selectedJob.contains(job)
-                  ? Colors.white
-                  : ColorConstants.primaryColor,
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _skill(ProfileModel profile) {
-    final selectedSkill = profile.skillTags;
-    return Wrap(
-      spacing: 10.w,
-      runSpacing: 10.h,
-      children: [
-        for (final skill in skillConstant)
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 5.h,
-            ),
-            decoration: BoxDecoration(
-              color: selectedSkill.contains(skill)
-                  ? ColorConstants.primaryColor
-                  : Colors.white,
-              border: Border.all(
-                width: 1,
-                color: ColorConstants.primaryColor,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TuTiText.small(
-              context,
-              skill,
-              color: selectedSkill.contains(skill)
-                  ? Colors.white
-                  : ColorConstants.primaryColor,
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _days(ProfileModel profile) {
-    final selectedDay = profile.availableDays;
-    final days = sortedDay(selectedDay);
-    return Wrap(
-      spacing: 10.w,
-      runSpacing: 10.h,
-      children: [
-        for (final day in daysConstant)
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10.w,
-              vertical: 5.h,
-            ),
-            decoration: BoxDecoration(
-              color: days.contains(day)
-                  ? ColorConstants.primaryColor
-                  : Colors.white,
-              border: Border.all(
-                width: 1,
-                color: ColorConstants.primaryColor,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TuTiText.small(
-              context,
-              day,
-              color: days.contains(day)
-                  ? Colors.white
-                  : ColorConstants.primaryColor,
-            ),
-          ),
-      ],
     );
   }
 }

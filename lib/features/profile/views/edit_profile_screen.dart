@@ -15,12 +15,7 @@ import '../widgets/tuti_textfield.dart';
 import '../widgets/tuti_textformfield.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
-  const EditProfileScreen({
-    super.key,
-    required this.profile,
-  });
-
-  final ProfileModel profile;
+  const EditProfileScreen({super.key});
 
   static const String routeName = "editProfile";
   static const String routePath = "editProfile";
@@ -30,26 +25,22 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
-  late final TextEditingController _detailController =
-      TextEditingController(text: widget.profile.description);
-  late final TextEditingController _companyController =
-      TextEditingController(text: widget.profile.matchingDescription);
-  late final TextEditingController _timeController =
-      TextEditingController(text: widget.profile.availableHours);
-  late final TextEditingController _universityController =
-      TextEditingController(text: widget.profile.university);
-  late final TextEditingController _majorController = TextEditingController(
-      text: widget.profile.major.isEmpty ? "-" : widget.profile.major);
+  late final TextEditingController _detailController = TextEditingController();
+  late final TextEditingController _companyController = TextEditingController();
+  late final TextEditingController _timeController = TextEditingController();
+  late final TextEditingController _universityController = TextEditingController();
+  late final TextEditingController _majorController = TextEditingController();
 
-  late String _detail = widget.profile.description;
-  late String _company = widget.profile.matchingDescription;
-  late String? _time = widget.profile.availableHours;
-  late String _university = widget.profile.university;
-  late String _major = widget.profile.major;
+  late String _detail = '';
+  late String _company = '';
+  late String? _time = '';
+  late String _university = '';
+  late String _major = '';
 
   @override
   void initState() {
     super.initState();
+    getProfileBuilder();
     _detailController.addListener(() {
       setState(() {
         _detail = _detailController.text;
@@ -75,31 +66,6 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         _major = _majorController.text;
       });
     });
-    for (final day in widget.profile.availableDays) {
-      switch (day) {
-        case "MON":
-          _selectedDay.add("월");
-          break;
-        case "TUE":
-          _selectedDay.add("화");
-          break;
-        case "WED":
-          _selectedDay.add("수");
-          break;
-        case "THU":
-          _selectedDay.add("목");
-          break;
-        case "FRI":
-          _selectedDay.add("금");
-          break;
-        case "SAT":
-          _selectedDay.add("토");
-          break;
-        case "SUN":
-          _selectedDay.add("일");
-          break;
-      }
-    }
   }
 
   @override
@@ -112,12 +78,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     super.dispose();
   }
 
-  late bool _isMatching =
-      widget.profile.applyMatchingStatus == "ON" ? true : false;
+  late bool _isMatching = true;
 
-  late final List<String> _selectedJob = widget.profile.jobTags;
-  late final List<String> _selectedSkill = widget.profile.skillTags;
+  late final List<String> _selectedJob = [];
+  late final List<String> _selectedSkill = [];
   late final List<String> _selectedDay = [];
+
+  late String _name = "";
+  late String _age = "";
+  late String _gender = "";
 
   void _onSelectedJob(String job) {
     setState(() {
@@ -197,6 +166,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     await profileService.updateProfile(context, profile);
   }
 
+  Future<ProfileModel> getProfileBuilder() async {
+    final profileService = ref.read(profileServiceProvider);
+    final profile = await profileService.getProfile(context);
+
+    profile.applyMatchingStatus == "ON" ? _isMatching = true : _isMatching = false;
+    _universityController.text = profile.university;
+    _majorController.text = profile.major.isEmpty ? "-" : profile.major;
+    _detailController.text = profile.description;
+    _companyController.text = profile.matchingDescription;
+    _timeController.text = profile.availableHours ?? "";
+    _selectedJob.addAll(profile.jobTags);
+    _selectedSkill.addAll(profile.skillTags);
+    _selectedDay.addAll(profile.availableDays);
+
+    _name = profile.name ?? "-";
+    _age = profile.age.toString();
+    _gender = profile.gender ?? "-";
+
+    return profile;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConstraintsScaffold(
@@ -250,41 +240,44 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ],
               ),
               Gaps.h10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _buildCircleAvatar(),
-                  Gaps.w20,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TuTiProfile(
-                          title: '이름', data: widget.profile.name ?? "-"),
-                      Gaps.h5,
-                      TuTiProfile(
-                          title: '나이', data: widget.profile.age.toString()),
-                      Gaps.h5,
-                      TuTiProfile(
-                          title: '성별', data: widget.profile.gender ?? "-"),
-                      Gaps.h5,
-                      TuTiTextField(
-                        title: '학교',
-                        controller: _universityController,
-                        hintText: widget.profile.university.isEmpty
-                            ? "-"
-                            : widget.profile.university,
-                      ),
-                      Gaps.h5,
-                      TuTiTextField(
-                        title: '학과',
-                        controller: _majorController,
-                        hintText: widget.profile.major.isEmpty
-                            ? "-"
-                            : widget.profile.major,
-                      ),
-                    ],
-                  ),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildCircleAvatar(),
+                    Gaps.w20,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TuTiProfile(
+                            title: '이름', data: _name),
+                        Gaps.h5,
+                        TuTiProfile(
+                            title: '나이', data: _age),
+                        Gaps.h5,
+                        TuTiProfile(
+                            title: '성별', data: _gender),
+                        Gaps.h5,
+                        TuTiTextField(
+                          title: '학교',
+                          controller: _universityController,
+                          hintText: _university.isEmpty
+                              ? "-"
+                              : _university,
+                        ),
+                        Gaps.h5,
+                        TuTiTextField(
+                          title: '학과',
+                          controller: _majorController,
+                          hintText: _major.isEmpty
+                              ? "-"
+                              : _major,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               Gaps.h20,
               TuTiText.medium(context, '관심직무',
