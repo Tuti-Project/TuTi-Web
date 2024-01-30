@@ -82,7 +82,7 @@ final routerProvider = Provider((ref) {
         name: TuTiDetailScreen.routeName,
         path: TuTiDetailScreen.routePath,
         builder: (context, state) {
-          final memberId = int.parse(state.params["memberId"] ?? "0");
+          final memberId = int.parse(state.queryParams["memberId"] ?? "0");
           return TuTiDetailScreen(memberId: memberId);
         },
       ),
