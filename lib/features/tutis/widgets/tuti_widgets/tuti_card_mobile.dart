@@ -30,7 +30,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   }
 
   void _getDetailProfile(int memberId) async {
-
     if (context.mounted) {
       context.pushNamed(
         TuTiDetailScreen.routeName,
