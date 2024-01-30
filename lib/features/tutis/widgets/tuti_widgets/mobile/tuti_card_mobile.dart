@@ -44,63 +44,58 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: RefreshIndicator.adaptive(
-        displacement: 50,
-        edgeOffset: 10,
-        onRefresh: () async => await getMembersBuilder(),
-        child: FutureBuilder<List<MemberModel>>(
-            future: getMembersBuilder(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text('데이터를 불러오는데 실패했습니다.'),
-                );
-              }
-              final members = snapshot.data!;
-              return ListView.separated(
-                itemCount: members.length,
-                separatorBuilder: (context, index) {
-                  return Gaps.h32;
-                },
-                itemBuilder: (context, index) {
-                  final member = members[index];
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                    child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: 250.h,
-                        maxHeight: 250.h,
-                      ),
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 2,
-                            color: ColorConstants.primaryColor,
-                          ),
-                          borderRadius: BorderRadius.circular(45),
+      child: FutureBuilder<List<MemberModel>>(
+          future: getMembersBuilder(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('데이터를 불러오는데 실패했습니다.'),
+              );
+            }
+            final members = snapshot.data!;
+            return ListView.separated(
+              itemCount: members.length,
+              separatorBuilder: (context, index) {
+                return Gaps.h32;
+              },
+              itemBuilder: (context, index) {
+                final member = members[index];
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.sp),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      minHeight: 250.h,
+                      maxHeight: 250.h,
+                    ),
+                    decoration: ShapeDecoration(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 2,
+                          color: ColorConstants.primaryColor,
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildLeftColumn(context, member),
-                          Gaps.w24,
-                          _buildRightColumn(context, member),
-                        ],
+                        borderRadius: BorderRadius.circular(45),
                       ),
                     ),
-                  );
-                },
-              );
-            }),
-      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildLeftColumn(context, member),
+                        Gaps.w24,
+                        _buildRightColumn(context, member),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
     );
   }
 
