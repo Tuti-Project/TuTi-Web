@@ -108,3 +108,4 @@ pubspec.lock
 # firebase
 firebase.json
 .firebase
+.firebaserc
