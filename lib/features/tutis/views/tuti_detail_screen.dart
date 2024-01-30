@@ -6,19 +6,20 @@ import 'package:tuti/common/constraints_scaffold.dart';
 import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/gaps.dart';
 import 'package:tuti/features/profile/models/proifle_model.dart';
+import 'package:tuti/features/profile/widgets/tuti_container.dart';
 import 'package:tuti/features/profile/widgets/tuti_profile.dart';
 
 import '../../../constants/color.dart';
 import '../../../constants/string.dart';
-import '../../profile/widgets/tuti_textformfield.dart';
+import '../../profile/services/proifle_service.dart';
 
 class TuTiDetailScreen extends ConsumerStatefulWidget {
   const TuTiDetailScreen({
     Key? key,
-    required this.profile,
+    required this.memberId,
   }) : super(key: key);
 
-  final ProfileModel profile;
+  final int memberId;
 
   static const String routeName = "profileDetail";
   static const String routePath = "/profileDetail";
@@ -28,62 +29,13 @@ class TuTiDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
-  late final TextEditingController _detailController =
-      TextEditingController(text: widget.profile.description);
-  late final TextEditingController _companyController =
-      TextEditingController(text: widget.profile.matchingDescription);
-  late final TextEditingController _timeController =
-      TextEditingController(text: widget.profile.availableHours);
-  late final TextEditingController _universityController =
-      TextEditingController(text: widget.profile.university);
-  late final TextEditingController _majorController = TextEditingController(
-      text: widget.profile.major.isEmpty ? "-" : widget.profile.major);
 
-  @override
-  void initState() {
-    super.initState();
-    for (final day in widget.profile.availableDays) {
-      switch (day) {
-        case "MON":
-          _selectedDay.add("월");
-          break;
-        case "TUE":
-          _selectedDay.add("화");
-          break;
-        case "WED":
-          _selectedDay.add("수");
-          break;
-        case "THU":
-          _selectedDay.add("목");
-          break;
-        case "FRI":
-          _selectedDay.add("금");
-          break;
-        case "SAT":
-          _selectedDay.add("토");
-          break;
-        case "SUN":
-          _selectedDay.add("일");
-          break;
-      }
-    }
+  Future<ProfileModel> getProfileBuilder() async {
+    final profileService = ref.read(profileServiceProvider);
+    final profile =
+    await profileService.getProfile(context, memberId: widget.memberId);
+    return profile;
   }
-
-  @override
-  void dispose() {
-    _detailController.dispose();
-    _companyController.dispose();
-    _timeController.dispose();
-    _universityController.dispose();
-    _majorController.dispose();
-    super.dispose();
-  }
-
-  late final List<String> _selectedJob = widget.profile.jobTags;
-  late final List<String> _selectedSkill = widget.profile.skillTags;
-  late final List<String> _selectedDay = widget.profile.availableDays;
-  late final bool _isMatching =
-      widget.profile.applyMatchingStatus == "ON" ? true : false;
 
   @override
   Widget build(BuildContext context) {
@@ -108,124 +60,126 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
           ),
         ),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: FutureBuilder<ProfileModel>(
+            future: getProfileBuilder(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('데이터를 불러오는데 실패했습니다.'),
+                );
+              }
+              final profile = snapshot.data!;
+              final isMatching = profile.applyMatchingStatus == "ON" ? true : false;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TuTiText.large(
-                    context,
-                    '${widget.profile.name} 님',
-                  ),
-                ],
-              ),
-              Gaps.h10,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _buildCircleAvatar(),
-                  Gaps.w20,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TuTiProfile(
-                          title: '이름', data: widget.profile.name ?? "-"),
-                      Gaps.h5,
-                      TuTiProfile(
-                          title: '나이', data: widget.profile.age.toString()),
-                      Gaps.h5,
-                      TuTiProfile(
-                          title: '성별', data: widget.profile.gender ?? "-"),
-                      Gaps.h5,
-                      TuTiProfile(
-                          title: '학교',
-                          data: widget.profile.university.isEmpty
-                              ? "-"
-                              : widget.profile.university),
-                      Gaps.h5,
-                      TuTiProfile(
-                          title: '학과',
-                          data: widget.profile.major.isEmpty
-                              ? "-"
-                              : widget.profile.major),
+                      TuTiText.large(
+                        context,
+                        '${profile.name} 님',
+                      ),
                     ],
                   ),
-                ],
-              ),
-              Gaps.h20,
-              TuTiText.medium(context, '관심직무',
-                  color: ColorConstants.profileColor),
-              Gaps.h10,
-              if (widget.profile.jobTags.isEmpty)
-                const IgnorePointer(
-                  child: TuTiTextFormField(
-                    hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                  ),
-                ),
-              if (widget.profile.jobTags.isNotEmpty) _jobs(),
-              Gaps.h20,
-              TuTiText.medium(context, '활용 능력',
-                  color: ColorConstants.profileColor),
-              Gaps.h10,
-              if (widget.profile.skillTags.isEmpty)
-                const IgnorePointer(
-                  child: TuTiTextFormField(
-                    hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                  ),
-                ),
-              if (widget.profile.skillTags.isNotEmpty) _skill(),
-              Gaps.h20,
-              TuTiText.medium(context, '상세 설명 및 자격증',
-                  color: ColorConstants.profileColor),
-              Gaps.h10,
-              IgnorePointer(
-                child: TuTiTextFormField(
-                  controller: _detailController,
-                  hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                ),
-              ),
-              Gaps.h20,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TuTiText.medium(context, '직무매칭 인턴 신청 여부',
-                      color: ColorConstants.profileColor),
-                  IgnorePointer(
-                    child: Transform.scale(
-                      scale: 0.8,
-                      child: CupertinoSwitch(
-                        activeColor: ColorConstants.primaryColor,
-                        value: _isMatching,
-                        onChanged: (value) {},
+                  Gaps.h10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      _buildCircleAvatar(),
+                      Gaps.w20,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TuTiProfile(
+                              title: '이름', data: profile.name ?? "-"),
+                          Gaps.h5,
+                          TuTiProfile(
+                              title: '나이', data: profile.age.toString()),
+                          Gaps.h5,
+                          TuTiProfile(
+                              title: '성별', data: profile.gender ?? "-"),
+                          Gaps.h5,
+                          TuTiProfile(
+                              title: '학교',
+                              data: profile.university.isEmpty
+                                  ? "-"
+                                  : profile.university),
+                          Gaps.h5,
+                          TuTiProfile(
+                              title: '학과',
+                              data: profile.major.isEmpty
+                                  ? "-"
+                                  : profile.major),
+                        ],
                       ),
+                    ],
+                  ),
+                  Gaps.h20,
+                  TuTiText.medium(context, '관심직무',
+                      color: ColorConstants.profileColor),
+                  Gaps.h10,
+                  if (profile.jobTags.isEmpty)
+                    TuTiContainer(
+                      text: profile.description,
                     ),
+                  if (profile.jobTags.isNotEmpty) _jobs(profile),
+                  Gaps.h20,
+                  TuTiText.medium(context, '활용 능력',
+                      color: ColorConstants.profileColor),
+                  Gaps.h10,
+                  if (profile.skillTags.isEmpty)
+                    TuTiContainer(
+                      text: profile.description,
+                    ),
+                  if (profile.skillTags.isNotEmpty) _skill(profile),
+                  Gaps.h20,
+                  TuTiText.medium(context, '상세 설명 및 자격증',
+                      color: ColorConstants.profileColor),
+                  Gaps.h10,
+                  TuTiContainer(
+                    text: profile.description,
+                  ),
+                  Gaps.h20,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TuTiText.medium(context, '직무매칭 인턴 신청 여부',
+                          color: ColorConstants.profileColor),
+                      IgnorePointer(
+                        child: Transform.scale(
+                          scale: 0.8,
+                          child: CupertinoSwitch(
+                            activeColor: ColorConstants.primaryColor,
+                            value: isMatching,
+                            onChanged: (value) {},
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (!isMatching) Gaps.h10,
+                  if (!isMatching)
+                    TuTiContainer(
+                      text: profile.matchingDescription,
+                    ),
+                  Gaps.h20,
+                  TuTiText.medium(context, '대면 업무 가능 시간',
+                      color: ColorConstants.profileColor),
+                  Gaps.h10,
+                  _days(profile),
+                  Gaps.h10,
+                  TuTiContainer(
+                    text: profile.availableHours ?? "",
                   ),
                 ],
-              ),
-              if (!_isMatching) Gaps.h10,
-              if (!_isMatching)
-                IgnorePointer(
-                  child: TuTiTextFormField(
-                    controller: _companyController,
-                    hintText: '근무 중인 회사를 입력해주세요!',
-                    limitLength: 30,
-                  ),
-                ),
-              Gaps.h20,
-              TuTiText.medium(context, '대면 업무 가능 시간',
-                  color: ColorConstants.profileColor),
-              Gaps.h10,
-              _days(),
-              Gaps.h10,
-              IgnorePointer(
-                child: TuTiTextFormField(
-                  controller: _timeController,
-                  hintText: '근무 가능 시간을 입력해주세요!',
-                  limitLength: 30,
-                ),
-              ),
-            ],
+              );
+            }
           ),
         ),
       ),
@@ -249,7 +203,8 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
     );
   }
 
-  Widget _jobs() {
+  Widget _jobs(ProfileModel profile) {
+    final selectedJob = profile.jobTags;
     return Wrap(
       spacing: 10.w,
       runSpacing: 10.h,
@@ -261,7 +216,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
               vertical: 5.h,
             ),
             decoration: BoxDecoration(
-              color: _selectedJob.contains(job)
+              color: selectedJob.contains(job)
                   ? ColorConstants.primaryColor
                   : Colors.white,
               border: Border.all(
@@ -273,7 +228,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
             child: TuTiText.small(
               context,
               job,
-              color: _selectedJob.contains(job)
+              color: selectedJob.contains(job)
                   ? Colors.white
                   : ColorConstants.primaryColor,
             ),
@@ -282,7 +237,8 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
     );
   }
 
-  Widget _skill() {
+  Widget _skill(ProfileModel profile) {
+    final selectedSkill = profile.skillTags;
     return Wrap(
       spacing: 10.w,
       runSpacing: 10.h,
@@ -294,7 +250,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
               vertical: 5.h,
             ),
             decoration: BoxDecoration(
-              color: _selectedSkill.contains(skill)
+              color: selectedSkill.contains(skill)
                   ? ColorConstants.primaryColor
                   : Colors.white,
               border: Border.all(
@@ -306,7 +262,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
             child: TuTiText.small(
               context,
               skill,
-              color: _selectedSkill.contains(skill)
+              color: selectedSkill.contains(skill)
                   ? Colors.white
                   : ColorConstants.primaryColor,
             ),
@@ -315,7 +271,8 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
     );
   }
 
-  Widget _days() {
+  Widget _days(ProfileModel profile) {
+    final selectedDay = profile.availableDays;
     return Wrap(
       spacing: 10.w,
       runSpacing: 10.h,
@@ -327,7 +284,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
               vertical: 5.h,
             ),
             decoration: BoxDecoration(
-              color: _selectedDay.contains(day)
+              color: selectedDay.contains(day)
                   ? ColorConstants.primaryColor
                   : Colors.white,
               border: Border.all(
@@ -339,7 +296,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
             child: TuTiText.small(
               context,
               day,
-              color: _selectedDay.contains(day)
+              color: selectedDay.contains(day)
                   ? Colors.white
                   : ColorConstants.primaryColor,
             ),
