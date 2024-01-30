@@ -6,27 +6,26 @@ import 'package:logger/logger.dart';
 
 import '../../../common/interceptor.dart';
 import '../../../constants/color.dart';
+import '../../../constants/string.dart';
 import '../models/proifle_model.dart';
 
 class ProfileService {
   final Dio _dio;
   ProfileService(this._dio) {
     _dio.options = BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: StringConstants.baseUrl,
       contentType: 'application/json',
     );
   }
-
-  static const String baseUrl = 'http://52.79.243.200:8080';
 
   Future<ProfileModel> getProfile(BuildContext context, {int? memberId}) async {
     try {
       Response? response;
       if (memberId != null) {
         response =
-            await _dio.get('$baseUrl/member/{memberId}?memberId=$memberId');
+            await _dio.get('${StringConstants.baseUrl}/member/{memberId}?memberId=$memberId');
       } else {
-        response = await _dio.get('$baseUrl/my-page');
+        response = await _dio.get('${StringConstants.baseUrl}/my-page');
       }
       if (response.statusCode == 200) {
         final result = response.data['data'];
@@ -54,7 +53,7 @@ class ProfileService {
   Future<void> updateProfile(BuildContext context, ProfileModel profile) async {
     try {
       final response = await _dio.put(
-        '$baseUrl/my-page',
+        '${StringConstants.baseUrl}/my-page',
         data: profile.toJson(),
       );
       if (response.statusCode == 200) {

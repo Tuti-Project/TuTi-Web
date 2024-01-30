@@ -10,23 +10,22 @@ import 'package:tuti/features/auth/models/user_profile_model.dart';
 
 import '../../../common/interceptor.dart';
 import '../../../common/token_manager.dart';
+import '../../../constants/string.dart';
 
 class AuthService {
   final Dio _dio;
   AuthService(this._dio) {
     _dio.options = BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: StringConstants.baseUrl,
       contentType: 'application/json',
     );
   }
-
-  static const String baseUrl = 'http://52.79.243.200:8080';
 
   Future<void> login(
       BuildContext context, String email, String password) async {
     try {
       final response = await _dio.post(
-        '$baseUrl/login',
+        '${StringConstants.baseUrl}/login',
         data: {
           'email': email,
           'password': password,
@@ -66,7 +65,7 @@ class AuthService {
       BuildContext context, UserProfileModel userProfileModel) async {
     try {
       final response = await _dio.post(
-        '$baseUrl/join/user',
+        '${StringConstants.baseUrl}/join/user',
         data: userProfileModel.toJson(),
       );
       if (response.statusCode == 200) {

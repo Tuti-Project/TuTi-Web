@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:tuti/constants/string.dart';
 
 import '../../../common/interceptor.dart';
 import '../../../constants/color.dart';
@@ -11,16 +12,14 @@ class MemberService {
   final Dio _dio;
   MemberService(this._dio) {
     _dio.options = BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: StringConstants.baseUrl,
       contentType: 'application/json',
     );
   }
 
-  static const String baseUrl = 'http://52.79.243.200:8080';
-
   Future<List<MemberModel>> getMembers(BuildContext context) async {
     try {
-      final response = await _dio.get('$baseUrl/home');
+      final response = await _dio.get('${StringConstants.baseUrl}/home');
       if (response.statusCode == 200) {
         final List<dynamic> result = response.data['data']['members'];
         final members = result.map((e) => MemberModel.fromJson(e)).toList();
