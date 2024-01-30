@@ -34,6 +34,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
     if (context.mounted) {
       context.pushNamed(
         TuTiDetailScreen.routeName,
+        params: {'tab': 'tuti'},
         queryParams: {
           'memberId': memberId.toString(),
         },

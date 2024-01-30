@@ -23,8 +23,8 @@ class TuTiDetailScreen extends ConsumerStatefulWidget {
 
   final int memberId;
 
-  static const String routeName = "profileDetail";
-  static const String routePath = "/profileDetail";
+  static const String routeName = "detail";
+  static const String routePath = "detail";
 
   @override
   ConsumerState<TuTiDetailScreen> createState() => _ProfileScreenState();

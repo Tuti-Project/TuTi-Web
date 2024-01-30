@@ -74,15 +74,15 @@ final routerProvider = Provider((ref) {
               return const EditProfileScreen();
             },
           ),
+          GoRoute(
+            name: TuTiDetailScreen.routeName,
+            path: TuTiDetailScreen.routePath,
+            builder: (context, state) {
+              final memberId = int.parse(state.queryParams["memberId"] ?? "0");
+              return TuTiDetailScreen(memberId: memberId);
+            },
+          ),
         ],
-      ),
-      GoRoute(
-        name: TuTiDetailScreen.routeName,
-        path: TuTiDetailScreen.routePath,
-        builder: (context, state) {
-          final memberId = int.parse(state.queryParams["memberId"] ?? "0");
-          return TuTiDetailScreen(memberId: memberId);
-        },
       ),
     ],
   );
