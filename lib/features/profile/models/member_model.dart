@@ -5,6 +5,7 @@ class MemberModel {
   String major;
   String imageUrl;
   String applyMatchingStatus;
+  // String matchingDescription;
   List<String> jobTags;
 
   MemberModel({
@@ -14,6 +15,7 @@ class MemberModel {
     required this.major,
     required this.imageUrl,
     required this.applyMatchingStatus,
+    // required this.matchingDescription,
     required this.jobTags,
   });
 
@@ -25,6 +27,7 @@ class MemberModel {
       major: json['major'],
       imageUrl: json['imageUrl'],
       applyMatchingStatus: json['applyMatchingStatus'],
+      // matchingDescription: json['matchingDescription'],
       jobTags: List<String>.from(json['jobTags']),
     );
   }
@@ -36,6 +39,7 @@ class MemberModel {
       'major': major,
       'imageUrl': imageUrl,
       'applyMatchingStatus': applyMatchingStatus,
+      // 'matchingDescription': matchingDescription,
       'jobTags': jobTags,
     };
   }

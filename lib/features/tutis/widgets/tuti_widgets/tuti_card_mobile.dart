@@ -111,6 +111,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           TuTiText.small(
             context,
             member.applyMatchingStatus == 'ON' ? '매칭 가능' : '재직 중',
+            // member.applyMatchingStatus == 'ON' ? '매칭 가능' : member.matchingDescription.isNotEmpty ? member.matchingDescription : '재직 중',
             fontWeight: FontWeight.w900,
           ),
           Gaps.h6,
