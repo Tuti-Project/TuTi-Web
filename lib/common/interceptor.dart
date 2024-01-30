@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tuti/common/token_manager.dart';
 
+import '../constants/string.dart';
+
 class CustomInterceptor extends Interceptor {
   final Ref ref;
   final FlutterSecureStorage? storage;
@@ -40,6 +42,13 @@ class CustomInterceptor extends Interceptor {
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
+  dio.options = BaseOptions(
+    baseUrl: StringConstants.baseUrl,
+    contentType: 'application/json',
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  );
   if (kIsWeb) {
     final token = TokenManager.getToken();
     dio.interceptors.add(

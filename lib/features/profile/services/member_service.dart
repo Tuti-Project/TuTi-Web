@@ -10,12 +10,7 @@ import '../models/member_model.dart';
 
 class MemberService {
   final Dio _dio;
-  MemberService(this._dio) {
-    _dio.options = BaseOptions(
-      baseUrl: StringConstants.baseUrl,
-      contentType: 'application/json',
-    );
-  }
+  MemberService(this._dio);
 
   Future<List<MemberModel>> getMembers(BuildContext context) async {
     try {
@@ -45,6 +40,6 @@ class MemberService {
 }
 
 final memberServiceProvider = Provider((ref) {
-  final dio = ref.read(dioProvider);
+  final dio = ref.watch(dioProvider);
   return MemberService(dio);
 });

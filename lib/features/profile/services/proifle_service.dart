@@ -11,12 +11,7 @@ import '../models/proifle_model.dart';
 
 class ProfileService {
   final Dio _dio;
-  ProfileService(this._dio) {
-    _dio.options = BaseOptions(
-      baseUrl: StringConstants.baseUrl,
-      contentType: 'application/json',
-    );
-  }
+  ProfileService(this._dio);
 
   Future<ProfileModel> getMember(BuildContext context, {int? memberId}) async {
     try {

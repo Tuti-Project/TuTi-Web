@@ -14,12 +14,7 @@ import '../../../constants/string.dart';
 
 class AuthService {
   final Dio _dio;
-  AuthService(this._dio) {
-    _dio.options = BaseOptions(
-      baseUrl: StringConstants.baseUrl,
-      contentType: 'application/json',
-    );
-  }
+  AuthService(this._dio);
 
   Future<void> login(
       BuildContext context, String email, String password) async {
@@ -93,6 +88,6 @@ class AuthService {
 }
 
 final authServiceProvider = Provider((ref) {
-  final dio = ref.read(dioProvider);
+  final dio = ref.watch(dioProvider);
   return AuthService(dio);
 });
