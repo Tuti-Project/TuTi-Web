@@ -178,13 +178,37 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     _timeController.text = profile.availableHours ?? "";
     _selectedJob.addAll(profile.jobTags);
     _selectedSkill.addAll(profile.skillTags);
-    _selectedDay.addAll(profile.availableDays);
+    _selectedDay.addAll(sortedDay(profile.availableDays));
 
     _name = profile.name ?? "-";
     _age = profile.age.toString();
     _gender = profile.gender ?? "-";
 
     return profile;
+  }
+
+  List<String> sortedDay(List<String> selectedDay) {
+    final sortedDay = selectedDay.map((day) {
+      switch (day) {
+        case 'MON':
+          return '월';
+        case 'TUE':
+          return '화';
+        case 'WED':
+          return '수';
+        case 'THU':
+          return '목';
+        case 'FRI':
+          return '금';
+        case 'SAT':
+          return '토';
+        case 'SUN':
+          return '일';
+        default:
+          return '';
+      }
+    }).toList();
+    return sortedDay;
   }
 
   @override
