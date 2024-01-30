@@ -37,6 +37,30 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
     return profile;
   }
 
+  List<String> sortedDay(List<String> selectedDay) {
+    final sortedDay = selectedDay.map((day) {
+      switch (day) {
+        case 'MON':
+          return '월';
+        case 'TUE':
+          return '화';
+        case 'WED':
+          return '수';
+        case 'THU':
+          return '목';
+        case 'FRI':
+          return '금';
+        case 'SAT':
+          return '토';
+        case 'SUN':
+          return '일';
+        default:
+          return '';
+      }
+    }).toList();
+    return sortedDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConstraintsScaffold(
@@ -273,6 +297,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
 
   Widget _days(ProfileModel profile) {
     final selectedDay = profile.availableDays;
+    final days = sortedDay(selectedDay);
     return Wrap(
       spacing: 10.w,
       runSpacing: 10.h,
@@ -284,7 +309,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
               vertical: 5.h,
             ),
             decoration: BoxDecoration(
-              color: selectedDay.contains(day)
+              color: days.contains(day)
                   ? ColorConstants.primaryColor
                   : Colors.white,
               border: Border.all(
@@ -296,7 +321,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
             child: TuTiText.small(
               context,
               day,
-              color: selectedDay.contains(day)
+              color: days.contains(day)
                   ? Colors.white
                   : ColorConstants.primaryColor,
             ),
