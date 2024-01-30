@@ -165,14 +165,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     TuTiText.medium(context, '상세 설명 및 자격증',
                         color: ColorConstants.profileColor),
                     Gaps.h10,
-                    if (profile.description.isEmpty)
-                      const TuTiContainer(
-                        text: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                      ),
-                    if (profile.description.isNotEmpty)
-                      TuTiContainer(
-                        text: profile.description,
-                      ),
+                    TuTiContainer(
+                      text: profile.description.isEmpty
+                          ? '더 자세한 정보를 기입하면 매칭확률이 높아집니다!'
+                          : profile.description,
+                    ),
                     Gaps.h20,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,7 +200,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     TuTiDays(profile: profile),
                     Gaps.h10,
                     TuTiContainer(
-                      text: profile.availableHours ?? "",
+                      text: profile.availableHours == null ||
+                              profile.availableHours!.isEmpty
+                          ? "더 자세한 정보를 기입하면 매칭확률이 높아집니다!"
+                          : profile.availableHours ?? "",
                     ),
                   ],
                 );
