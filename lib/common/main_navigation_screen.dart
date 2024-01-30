@@ -74,12 +74,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
               onTap: _onTap,
               items: [
                 BottomNavigationBarItem(
-                  // Icon(
-                  //   Icons.bar_chart,
-                  //   color: _selectedIndex == 0
-                  //       ? ColorConstants.primaryColor
-                  //       : Colors.grey,
-                  // ),
                   icon: Image.asset(
                     'assets/images/personalBranding.png',
                     width: 24.w,

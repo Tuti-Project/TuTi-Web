@@ -107,127 +107,125 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
             borderRadius: BorderRadius.circular(45),
           ),
         ),
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TuTiText.large(
-                      context,
-                      '${widget.profile.name} 님',
-                    ),
-                  ],
-                ),
-                Gaps.h10,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _buildCircleAvatar(),
-                    Gaps.w20,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TuTiProfile(
-                            title: '이름', data: widget.profile.name ?? "-"),
-                        Gaps.h5,
-                        TuTiProfile(
-                            title: '나이', data: widget.profile.age.toString()),
-                        Gaps.h5,
-                        TuTiProfile(
-                            title: '성별', data: widget.profile.gender ?? "-"),
-                        Gaps.h5,
-                        TuTiProfile(
-                            title: '학교',
-                            data: widget.profile.university.isEmpty
-                                ? "-"
-                                : widget.profile.university),
-                        Gaps.h5,
-                        TuTiProfile(
-                            title: '학과',
-                            data: widget.profile.major.isEmpty
-                                ? "-"
-                                : widget.profile.major),
-                      ],
-                    ),
-                  ],
-                ),
-                Gaps.h20,
-                TuTiText.medium(context, '관심직무',
-                    color: ColorConstants.profileColor),
-                Gaps.h10,
-                if (widget.profile.jobTags.isEmpty)
-                  const IgnorePointer(
-                    child: TuTiTextFormField(
-                      hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TuTiText.large(
+                    context,
+                    '${widget.profile.name} 님',
                   ),
-                if (widget.profile.jobTags.isNotEmpty) _jobs(),
-                Gaps.h20,
-                TuTiText.medium(context, '활용 능력',
-                    color: ColorConstants.profileColor),
-                Gaps.h10,
-                if (widget.profile.skillTags.isEmpty)
-                  const IgnorePointer(
-                    child: TuTiTextFormField(
-                      hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
-                    ),
+                ],
+              ),
+              Gaps.h10,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _buildCircleAvatar(),
+                  Gaps.w20,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TuTiProfile(
+                          title: '이름', data: widget.profile.name ?? "-"),
+                      Gaps.h5,
+                      TuTiProfile(
+                          title: '나이', data: widget.profile.age.toString()),
+                      Gaps.h5,
+                      TuTiProfile(
+                          title: '성별', data: widget.profile.gender ?? "-"),
+                      Gaps.h5,
+                      TuTiProfile(
+                          title: '학교',
+                          data: widget.profile.university.isEmpty
+                              ? "-"
+                              : widget.profile.university),
+                      Gaps.h5,
+                      TuTiProfile(
+                          title: '학과',
+                          data: widget.profile.major.isEmpty
+                              ? "-"
+                              : widget.profile.major),
+                    ],
                   ),
-                if (widget.profile.skillTags.isNotEmpty) _skill(),
-                Gaps.h20,
-                TuTiText.medium(context, '상세 설명 및 자격증',
-                    color: ColorConstants.profileColor),
-                Gaps.h10,
-                IgnorePointer(
+                ],
+              ),
+              Gaps.h20,
+              TuTiText.medium(context, '관심직무',
+                  color: ColorConstants.profileColor),
+              Gaps.h10,
+              if (widget.profile.jobTags.isEmpty)
+                const IgnorePointer(
                   child: TuTiTextFormField(
-                    controller: _detailController,
                     hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
                   ),
                 ),
-                Gaps.h20,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TuTiText.medium(context, '직무매칭 인턴 신청 여부',
-                        color: ColorConstants.profileColor),
-                    IgnorePointer(
-                      child: Transform.scale(
-                        scale: 0.8,
-                        child: CupertinoSwitch(
-                          activeColor: ColorConstants.primaryColor,
-                          value: _isMatching,
-                          onChanged: (value) {},
-                        ),
+              if (widget.profile.jobTags.isNotEmpty) _jobs(),
+              Gaps.h20,
+              TuTiText.medium(context, '활용 능력',
+                  color: ColorConstants.profileColor),
+              Gaps.h10,
+              if (widget.profile.skillTags.isEmpty)
+                const IgnorePointer(
+                  child: TuTiTextFormField(
+                    hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                  ),
+                ),
+              if (widget.profile.skillTags.isNotEmpty) _skill(),
+              Gaps.h20,
+              TuTiText.medium(context, '상세 설명 및 자격증',
+                  color: ColorConstants.profileColor),
+              Gaps.h10,
+              IgnorePointer(
+                child: TuTiTextFormField(
+                  controller: _detailController,
+                  hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                ),
+              ),
+              Gaps.h20,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TuTiText.medium(context, '직무매칭 인턴 신청 여부',
+                      color: ColorConstants.profileColor),
+                  IgnorePointer(
+                    child: Transform.scale(
+                      scale: 0.8,
+                      child: CupertinoSwitch(
+                        activeColor: ColorConstants.primaryColor,
+                        value: _isMatching,
+                        onChanged: (value) {},
                       ),
                     ),
-                  ],
-                ),
-                if (!_isMatching) Gaps.h10,
-                if (!_isMatching)
-                  IgnorePointer(
-                    child: TuTiTextFormField(
-                      controller: _companyController,
-                      hintText: '근무 중인 회사를 입력해주세요!',
-                      limitLength: 30,
-                    ),
                   ),
-                Gaps.h20,
-                TuTiText.medium(context, '대면 업무 가능 시간',
-                    color: ColorConstants.profileColor),
-                Gaps.h10,
-                _days(),
-                Gaps.h10,
+                ],
+              ),
+              if (!_isMatching) Gaps.h10,
+              if (!_isMatching)
                 IgnorePointer(
                   child: TuTiTextFormField(
-                    controller: _timeController,
-                    hintText: '근무 가능 시간을 입력해주세요!',
+                    controller: _companyController,
+                    hintText: '근무 중인 회사를 입력해주세요!',
                     limitLength: 30,
                   ),
                 ),
-              ],
-            ),
+              Gaps.h20,
+              TuTiText.medium(context, '대면 업무 가능 시간',
+                  color: ColorConstants.profileColor),
+              Gaps.h10,
+              _days(),
+              Gaps.h10,
+              IgnorePointer(
+                child: TuTiTextFormField(
+                  controller: _timeController,
+                  hintText: '근무 가능 시간을 입력해주세요!',
+                  limitLength: 30,
+                ),
+              ),
+            ],
           ),
         ),
       ),
