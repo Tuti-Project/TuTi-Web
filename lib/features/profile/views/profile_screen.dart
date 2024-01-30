@@ -28,12 +28,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-
   void _editProfile() {
-    context.pushNamed(
-      EditProfileScreen.routeName,
-      params: {'tab': 'profile'}
-    );
+    context.pushNamed(EditProfileScreen.routeName, params: {'tab': 'profile'});
   }
 
   Future<ProfileModel> getProfileBuilder() async {
@@ -79,7 +75,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   );
                 }
                 final profile = snapshot.data!;
-                final isMatching = profile.applyMatchingStatus == "ON" ? true : false;
+                final isMatching =
+                    profile.applyMatchingStatus == "ON" ? true : false;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -162,14 +159,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       const TuTiContainer(
                         text: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
                       ),
-                    if (profile.skillTags.isNotEmpty) TuTiSkills(profile: profile),
+                    if (profile.skillTags.isNotEmpty)
+                      TuTiSkills(profile: profile),
                     Gaps.h20,
                     TuTiText.medium(context, '상세 설명 및 자격증',
                         color: ColorConstants.profileColor),
                     Gaps.h10,
-                    TuTiContainer(
-                      text: profile.description,
-                    ),
+                    if (profile.description.isEmpty)
+                      const TuTiContainer(
+                        text: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
+                      ),
+                    if (profile.description.isNotEmpty)
+                      TuTiContainer(
+                        text: profile.description,
+                      ),
                     Gaps.h20,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
