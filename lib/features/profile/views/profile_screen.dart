@@ -110,37 +110,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ],
                     ),
                     Gaps.h10,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _buildCircleAvatar(),
-                        Gaps.w20,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TuTiProfile(
-                                title: '이름', data: profile.name ?? "-"),
-                            Gaps.h5,
-                            TuTiProfile(
-                                title: '나이', data: profile.age.toString()),
-                            Gaps.h5,
-                            TuTiProfile(
-                                title: '성별', data: profile.gender ?? "-"),
-                            Gaps.h5,
-                            TuTiProfile(
-                                title: '학교',
-                                data: profile.university.isEmpty
-                                    ? "-"
-                                    : profile.university),
-                            Gaps.h5,
-                            TuTiProfile(
-                                title: '학과',
-                                data: profile.major.isEmpty
-                                    ? "-"
-                                    : profile.major),
-                          ],
-                        ),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          _buildCircleAvatar(),
+                          Gaps.w20,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TuTiProfile(
+                                  title: '이름', data: profile.name ?? "-"),
+                              Gaps.h5,
+                              TuTiProfile(
+                                  title: '나이', data: profile.age.toString()),
+                              Gaps.h5,
+                              TuTiProfile(
+                                  title: '성별', data: profile.gender ?? "-"),
+                              Gaps.h5,
+                              TuTiProfile(
+                                  title: '학교',
+                                  data: profile.university.isEmpty
+                                      ? "-"
+                                      : profile.university),
+                              Gaps.h5,
+                              TuTiProfile(
+                                  title: '학과',
+                                  data: profile.major.isEmpty
+                                      ? "-"
+                                      : profile.major),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     Gaps.h20,
                     TuTiText.medium(context, '관심직무',
