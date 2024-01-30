@@ -18,12 +18,12 @@ class ProfileService {
     );
   }
 
-  Future<ProfileModel> getProfile(BuildContext context, {int? memberId}) async {
+  Future<ProfileModel> getMember(BuildContext context, {int? memberId}) async {
     try {
       Response? response;
       if (memberId != null) {
-        response =
-            await _dio.get('${StringConstants.baseUrl}/member/{memberId}?memberId=$memberId');
+        response = await _dio.get(
+            '${StringConstants.baseUrl}/member/{memberId}?memberId=$memberId');
       } else {
         response = await _dio.get('${StringConstants.baseUrl}/my-page');
       }

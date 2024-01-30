@@ -34,7 +34,7 @@ class _ProfileScreenState extends ConsumerState<TuTiDetailScreen> {
   Future<ProfileModel> getProfileBuilder() async {
     final profileService = ref.read(profileServiceProvider);
     final profile =
-        await profileService.getProfile(context, memberId: widget.memberId);
+        await profileService.getMember(context, memberId: widget.memberId);
     return profile;
   }
 

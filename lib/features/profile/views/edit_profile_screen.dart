@@ -28,7 +28,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   late final TextEditingController _detailController = TextEditingController();
   late final TextEditingController _companyController = TextEditingController();
   late final TextEditingController _timeController = TextEditingController();
-  late final TextEditingController _universityController = TextEditingController();
+  late final TextEditingController _universityController =
+      TextEditingController();
   late final TextEditingController _majorController = TextEditingController();
 
   late String _detail = '';
@@ -168,9 +169,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   Future<ProfileModel> getProfileBuilder() async {
     final profileService = ref.read(profileServiceProvider);
-    final profile = await profileService.getProfile(context);
+    final profile = await profileService.getMember(context);
 
-    profile.applyMatchingStatus == "ON" ? _isMatching = true : _isMatching = false;
+    profile.applyMatchingStatus == "ON"
+        ? _isMatching = true
+        : _isMatching = false;
     _universityController.text = profile.university;
     _majorController.text = profile.major.isEmpty ? "-" : profile.major;
     _detailController.text = profile.description;
@@ -274,29 +277,22 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TuTiProfile(
-                            title: '이름', data: _name),
+                        TuTiProfile(title: '이름', data: _name),
                         Gaps.h5,
-                        TuTiProfile(
-                            title: '나이', data: _age),
+                        TuTiProfile(title: '나이', data: _age),
                         Gaps.h5,
-                        TuTiProfile(
-                            title: '성별', data: _gender),
+                        TuTiProfile(title: '성별', data: _gender),
                         Gaps.h5,
                         TuTiTextField(
                           title: '학교',
                           controller: _universityController,
-                          hintText: _university.isEmpty
-                              ? "-"
-                              : _university,
+                          hintText: _university.isEmpty ? "-" : _university,
                         ),
                         Gaps.h5,
                         TuTiTextField(
                           title: '학과',
                           controller: _majorController,
-                          hintText: _major.isEmpty
-                              ? "-"
-                              : _major,
+                          hintText: _major.isEmpty ? "-" : _major,
                         ),
                       ],
                     ),

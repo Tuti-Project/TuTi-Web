@@ -34,7 +34,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Future<ProfileModel> getProfileBuilder() async {
     final profileService = ref.read(profileServiceProvider);
-    final profile = await profileService.getProfile(context);
+    final profile = await profileService.getMember(context);
     return profile;
   }
 
