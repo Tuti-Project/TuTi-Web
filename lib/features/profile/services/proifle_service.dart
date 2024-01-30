@@ -53,7 +53,7 @@ class ProfileService {
 
   Future<void> updateProfile(BuildContext context, ProfileModel profile) async {
     try {
-      final response = await _dio.patch(
+      final response = await _dio.put(
         '$baseUrl/my-page',
         data: profile.toJson(),
       );
