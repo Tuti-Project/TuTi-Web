@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:tuti/constants/string.dart';
 
 import '../../../common/custom_interceptor.dart';
-import '../../../constants/color.dart';
+import '../../../common/http_error_handler.dart';
 import '../models/member_model.dart';
 
 class MemberService {
@@ -15,21 +15,13 @@ class MemberService {
   Future<List<MemberModel>> getMembers(BuildContext context) async {
     try {
       final response = await _dio.get('${StringConstants.baseUrl}/home');
-      if (response.statusCode == 200) {
+      if (response.data['code'] == 200) {
         final List<dynamic> result = response.data['data']['members'];
         final members = result.map((e) => MemberModel.fromJson(e)).toList();
         return members;
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                response.data['message'].toString(),
-                style: const TextStyle(color: Colors.white),
-              ),
-              backgroundColor: ColorConstants.primaryColor,
-            ),
-          );
+          HttpErrorHandler(context, response.data).handleResponse();
         }
       }
     } catch (e) {

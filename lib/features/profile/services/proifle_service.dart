@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:tuti/common/http_error_handler.dart';
 
 import '../../../common/custom_interceptor.dart';
-import '../../../constants/color.dart';
+import '../../../common/tuti_snackbar.dart';
 import '../../../constants/string.dart';
 import '../models/proifle_model.dart';
 
@@ -22,21 +23,13 @@ class ProfileService {
       } else {
         response = await _dio.get('${StringConstants.baseUrl}/my-page');
       }
-      if (response.statusCode == 200) {
+      if (response.data['code'] == 200) {
         final result = response.data['data'];
         final profile = ProfileModel.fromJson(result);
         return profile;
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                response.data['message'].toString(),
-                style: const TextStyle(color: Colors.white),
-              ),
-              backgroundColor: ColorConstants.primaryColor,
-            ),
-          );
+          HttpErrorHandler(context, response.data).handleResponse();
         }
       }
     } catch (e) {
@@ -51,30 +44,14 @@ class ProfileService {
         '${StringConstants.baseUrl}/my-page',
         data: profile.toJson(),
       );
-      if (response.statusCode == 200) {
+      if (response.data['code'] == 200) {
         if (context.mounted) {
           context.pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                '프로필이 수정되었습니다.',
-                style: TextStyle(color: Colors.white),
-              ),
-              backgroundColor: ColorConstants.primaryColor,
-            ),
-          );
+          TuTiSnackBar.showSnackBar(context, '프로필이 수정되었습니다.');
         }
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                response.data['message'].toString(),
-                style: const TextStyle(color: Colors.white),
-              ),
-              backgroundColor: ColorConstants.primaryColor,
-            ),
-          );
+          HttpErrorHandler(context, response.data).handleResponse();
         }
       }
     } catch (e) {
