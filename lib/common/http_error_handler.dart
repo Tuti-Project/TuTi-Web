@@ -15,7 +15,7 @@ class HttpErrorHandler {
   );
 
   Future<void> handleResponse() async {
-    if (data['code'] == 401) {
+    if (data['code'] == 401 || data['message'] == '유효하지 않은 토큰입니다.') {
       TuTiSnackBar.showSnackBar(context, '로그인이 세션이 만료되었습니다. 다시 로그인해주세요.');
       if (kIsWeb) {
         await TokenManager.removeToken();
@@ -23,7 +23,7 @@ class HttpErrorHandler {
         await FlutterSecureStorageManager.removeStorage();
       }
       if (context.mounted) {
-        context.go('/login');
+        context.go('/home');
       }
     } else {
       TuTiSnackBar.showSnackBar(context, data['message'].toString());
