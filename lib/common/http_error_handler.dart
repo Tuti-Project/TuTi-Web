@@ -24,7 +24,7 @@ class HttpErrorHandler {
       }
       if (context.mounted) {
         context.go('/home');
-      }
+      }동
     } else {
       TuTiSnackBar.showSnackBar(context, data['message'].toString());
     }
