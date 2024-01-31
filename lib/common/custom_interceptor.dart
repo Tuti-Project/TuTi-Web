@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:tuti/common/token_manager.dart';
+import 'package:tuti/common/custom_token_manager.dart';
 
 class CustomInterceptor extends Interceptor {
   final Ref ref;
@@ -23,7 +23,7 @@ class CustomInterceptor extends Interceptor {
 
     String? accessToken = '';
     if (kIsWeb) {
-      accessToken = await TokenManager.getToken();
+      accessToken = await CustomTokenManager.getToken();
     } else {
       accessToken = await storage?.read(key: 'accessToken');
     }
@@ -46,7 +46,7 @@ class CustomInterceptor extends Interceptor {
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
   if (kIsWeb) {
-    final token = TokenManager.getToken();
+    final token = CustomTokenManager.getToken();
     dio.interceptors.add(
       CustomInterceptor(ref: ref, token: token),
     );

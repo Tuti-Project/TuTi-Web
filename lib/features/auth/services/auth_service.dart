@@ -7,9 +7,9 @@ import 'package:logger/logger.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
 
 import '../../../common/custom_interceptor.dart';
+import '../../../common/custom_token_manager.dart';
 import '../../../common/flutter_security_storage_manager.dart';
 import '../../../common/http_error_handler.dart';
-import '../../../common/token_manager.dart';
 import '../../../constants/string.dart';
 
 class AuthService {
@@ -29,7 +29,7 @@ class AuthService {
       if (response.data['code'] == 200) {
         final accessToken = response.data['data']['accessToken'];
         if (kIsWeb) {
-          await TokenManager.saveToken(accessToken);
+          await CustomTokenManager.saveToken(accessToken);
         } else {
           await FlutterSecureStorageManager.saveStorage(accessToken);
         }
@@ -66,6 +66,34 @@ class AuthService {
       }
     } catch (e) {
       Logger().e("signUp error : ${e.toString()}");
+    }
+  }
+
+  Future<void> kakaoLogin(BuildContext context, String accessToken) async {
+    try {
+      final response = await _dio.post(
+        '${StringConstants.baseUrl}/login/oauth/kakao',
+        queryParameters: {
+          'code': accessToken,
+        },
+      );
+      if (response.data['code'] == 200) {
+        final accessToken = response.data['data']['accessToken'];
+        if (kIsWeb) {
+          await CustomTokenManager.saveToken(accessToken);
+        } else {
+          await FlutterSecureStorageManager.saveStorage(accessToken);
+        }
+        if (context.mounted) {
+          context.go('/tuti');
+        }
+      } else {
+        if (context.mounted) {
+          HttpErrorHandler(context, response.data).handleResponse();
+        }
+      }
+    } catch (e) {
+      Logger().e("kakaoLogin error : ${e.toString()}");
     }
   }
 }

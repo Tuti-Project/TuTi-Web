@@ -5,8 +5,8 @@ import 'package:tuti/common/flutter_security_storage_manager.dart';
 import 'package:tuti/features/tutis/views/home_screen.dart';
 import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
+import 'common/custom_token_manager.dart';
 import 'common/main_navigation_screen.dart';
-import 'common/token_manager.dart';
 import 'features/auth/views/join_private_screen.dart';
 import 'features/auth/views/join_screen.dart';
 import 'features/auth/views/login_screen.dart';
@@ -18,7 +18,7 @@ final routerProvider = Provider((ref) {
     initialLocation: TuTiScreen.routePath,
     redirect: (context, state) async {
       if (kIsWeb) {
-        String? authToken = await TokenManager.getToken();
+        String? authToken = await CustomTokenManager.getToken();
         if (authToken == null || authToken.isEmpty) {
           if (state.subloc != JoinPrivateScreen.routePath &&
               state.subloc != JoinScreen.routePath &&
