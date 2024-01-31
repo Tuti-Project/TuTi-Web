@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tuti/common/token_manager.dart';
 
-import '../constants/string.dart';
-
 class CustomInterceptor extends Interceptor {
   final Ref ref;
   final FlutterSecureStorage? storage;
@@ -33,7 +31,12 @@ class CustomInterceptor extends Interceptor {
     // 실제 토큰으로 대체
     options.headers.addAll({
       'authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+      'Access-Control-Allow-Headers':
+          'Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization',
     });
 
     super.onRequest(options, handler);
@@ -42,13 +45,6 @@ class CustomInterceptor extends Interceptor {
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
-  dio.options = BaseOptions(
-    baseUrl: StringConstants.baseUrl,
-    contentType: 'application/json',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  );
   if (kIsWeb) {
     final token = TokenManager.getToken();
     dio.interceptors.add(
