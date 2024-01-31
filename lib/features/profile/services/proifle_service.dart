@@ -37,7 +37,7 @@ class ProfileService {
         }
       }
     } catch (e) {
-      Logger().e(e.toString());
+      Logger().e("getMember : ${e.toString()}");
     }
     return ProfileModel.empty();
   }
@@ -59,7 +59,7 @@ class ProfileService {
         }
       }
     } catch (e) {
-      Logger().e(e.toString());
+      Logger().e("updateProfile : ${e.toString()}");
     }
   }
 }

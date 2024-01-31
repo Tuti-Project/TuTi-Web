@@ -1,28 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:logger/logger.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
+import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/tuti_text.dart';
 import '../../../constants/color.dart';
 import '../../../constants/gaps.dart';
+import '../services/auth_service.dart';
 import 'join_private_screen.dart';
 
-class JoinScreen extends StatefulWidget {
+class JoinScreen extends ConsumerStatefulWidget {
   const JoinScreen({super.key});
 
   static const String routeName = "join";
   static const String routePath = "/join";
 
   @override
-  State<JoinScreen> createState() => _JoinScreenState();
+  ConsumerState<JoinScreen> createState() => _JoinScreenState();
 }
 
-class _JoinScreenState extends State<JoinScreen> {
+class _JoinScreenState extends ConsumerState<JoinScreen> {
   // 개입회원 가입하기 버튼
   void _register() {
     context.pushNamed(JoinPrivateScreen.routeName);
@@ -34,20 +37,18 @@ class _JoinScreenState extends State<JoinScreen> {
   // 카카오 회원가입
   void _registerKakao() async {
     // 카카오 sdk 사용
-    if (await isKakaoTalkInstalled()) {
-      try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
-        Logger().i('카카오톡으로 로그인 성공 ${token.accessToken}');
-      } catch (e) {
-        Logger().e('카카오톡으로 로그인 실패 ${e.toString()}');
+    try {
+      OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+      String? kakaoToken = await CustomTokenManager.getKaKaoToken();
+      Logger().i('token $token');
+      Logger().i('toJson ${token.accessToken}');
+      Logger().i('kakaoToken $kakaoToken');
+      final authService = ref.read(authServiceProvider);
+      if (context.mounted) {
+        await authService.kakaoLogin(context, kakaoToken!);
       }
-    } else {
-      try {
-        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-        Logger().i('카카오계정으로 로그인 성공 ${token.accessToken}');
-      } catch (e) {
-        Logger().e('카카오계정으로 로그인 실패 ${e.toString()}');
-      }
+    } catch (e) {
+      Logger().e('카카오계정으로 로그인 실패 ${e.toString()}');
     }
   }
 

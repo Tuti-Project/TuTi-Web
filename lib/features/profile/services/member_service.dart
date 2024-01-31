@@ -25,7 +25,7 @@ class MemberService {
         }
       }
     } catch (e) {
-      Logger().e(e.toString());
+      Logger().e("getMembers : ${e.toString()}");
     }
     return [];
   }
