@@ -2,12 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
 
 import '../../../common/custom_interceptor.dart';
+import '../../../common/flutter_security_storage_manager.dart';
 import '../../../common/http_error_handler.dart';
 import '../../../common/token_manager.dart';
 import '../../../constants/string.dart';
@@ -31,8 +31,7 @@ class AuthService {
         if (kIsWeb) {
           await TokenManager.saveToken(accessToken);
         } else {
-          const storage = FlutterSecureStorage();
-          await storage.write(key: 'accessToken', value: accessToken);
+          await FlutterSecureStorageManager.saveStorage(accessToken);
         }
         if (context.mounted) {
           context.go('/tuti');
