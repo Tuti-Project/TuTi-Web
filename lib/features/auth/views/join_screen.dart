@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:logger/logger.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
-import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,13 +38,13 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
     // 카카오 sdk 사용
     try {
       OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-      String? kakaoToken = await CustomTokenManager.getKaKaoToken();
-      Logger().i('token $token');
-      Logger().i('toJson ${token.accessToken}');
-      Logger().i('kakaoToken $kakaoToken');
+      // String? kakaoToken = await CustomTokenManager.getKaKaoToken();
+      // Logger().i('token $token');
+      // Logger().i('toJson ${token.accessToken}');
+      // Logger().i('kakaoToken $kakaoToken');
       final authService = ref.read(authServiceProvider);
       if (context.mounted) {
-        await authService.kakaoLogin(context, kakaoToken!);
+        await authService.kakaoLogin(context, token.accessToken);
       }
     } catch (e) {
       Logger().e('카카오계정으로 로그인 실패 ${e.toString()}');
