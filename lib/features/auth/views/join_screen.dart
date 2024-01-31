@@ -38,10 +38,6 @@ class _JoinScreenState extends ConsumerState<JoinScreen> {
     // 카카오 sdk 사용
     try {
       OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-      // String? kakaoToken = await CustomTokenManager.getKaKaoToken();
-      // Logger().i('token $token');
-      // Logger().i('toJson ${token.accessToken}');
-      // Logger().i('kakaoToken $kakaoToken');
       final authService = ref.read(authServiceProvider);
       if (context.mounted) {
         await authService.kakaoLogin(context, token.accessToken);
