@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:tuti/constants/string.dart';
 
-import '../../../common/interceptor.dart';
+import '../../../common/custom_interceptor.dart';
 import '../../../constants/color.dart';
 import '../models/member_model.dart';
 

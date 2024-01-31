@@ -8,7 +8,7 @@ import 'package:logger/logger.dart';
 import 'package:tuti/constants/color.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
 
-import '../../../common/interceptor.dart';
+import '../../../common/custom_interceptor.dart';
 import '../../../common/token_manager.dart';
 import '../../../constants/string.dart';
 
