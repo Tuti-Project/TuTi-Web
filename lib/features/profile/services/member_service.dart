@@ -12,9 +12,10 @@ class MemberService {
   final Dio _dio;
   MemberService(this._dio);
 
-  Future<List<MemberModel>> getMembers(BuildContext context) async {
+  Future<List<MemberModel>> getMembers(BuildContext context, int page) async {
     try {
-      final response = await _dio.get('${StringConstants.baseUrl}/home');
+      final response =
+          await _dio.get('${StringConstants.baseUrl}/home?page=$page');
       if (response.data['code'] == 200) {
         final List<dynamic> result = response.data['data']['members'];
         final members = result.map((e) => MemberModel.fromJson(e)).toList();

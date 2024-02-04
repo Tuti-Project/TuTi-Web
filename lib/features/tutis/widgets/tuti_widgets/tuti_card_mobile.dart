@@ -23,79 +23,87 @@ class TuTiCardMobile extends ConsumerStatefulWidget {
 }
 
 class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
-  Future<List<MemberModel>> getMembersBuilder() async {
-    final memberService = ref.read(memberServiceProvider);
-    final members = await memberService.getMembers(context);
-    return members;
+  late ScrollController _scrollController;
+  int _page = 0;
+  List<MemberModel> _allMembers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    _initializeMemberData();
   }
 
-  void _getDetailProfile(int memberId) async {
-    if (context.mounted) {
-      context.pushNamed(
-        TuTiDetailScreen.routeName,
-        params: {'tab': 'tuti'},
-        queryParams: {
-          'memberId': memberId.toString(),
-        },
-      );
+  Future<void> _initializeMemberData() async {
+    await getMembersBuilder(page: _page);
+  }
+
+  Future<List<MemberModel>> getMembersBuilder({required int page}) async {
+    final memberService = ref.read(memberServiceProvider);
+    print(page);
+    final members = await memberService.getMembers(context, page);
+
+    if (members.isNotEmpty) {
+      setState(() {
+        _allMembers.addAll(members);
+      });
+    }
+
+    return _allMembers;
+  }
+
+  void _scrollListener() {
+    // 리스트의 맨 아래에 도달했을 때
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      //서버에서 받아온 멤버 객체가 10의 배수일 때만 서버의 다음 페이지에 대한 멤버 정보를 받아옴.
+      if (_allMembers.length % 10 == 0) {
+        _page++;
+        getMembersBuilder(page: _page);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: FutureBuilder<List<MemberModel>>(
-          future: getMembersBuilder(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('데이터를 불러오는데 실패했습니다.'),
-              );
-            }
-            final members = snapshot.data!;
-            return ListView.separated(
-              itemCount: members.length,
-              separatorBuilder: (context, index) {
-                return Gaps.h32;
-              },
-              itemBuilder: (context, index) {
-                final member = members[index];
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                  child: Container(
-                    constraints: BoxConstraints(
-                      minHeight: 250.h,
-                      maxHeight: 250.h,
-                    ),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 2,
-                          color: ColorConstants.primaryColor,
-                        ),
-                        borderRadius: BorderRadius.circular(45),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildLeftColumn(context, member),
-                        Gaps.w24,
-                        _buildRightColumn(context, member),
-                      ],
-                    ),
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: _allMembers.length,
+        itemBuilder: (context, index) {
+          final member = _allMembers[index];
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.sp),
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: 250.h,
+                maxHeight: 250.h,
+              ),
+              margin: EdgeInsets.symmetric(vertical: 10.sp),
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    width: 2,
+                    color: ColorConstants.primaryColor,
                   ),
-                );
-              },
-            );
-          }),
+                  borderRadius: BorderRadius.circular(45),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildLeftColumn(context, member),
+                  Gaps.w24,
+                  _buildRightColumn(context, member),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -155,6 +163,18 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         ],
       ),
     );
+  }
+
+  void _getDetailProfile(int memberId) async {
+    if (context.mounted) {
+      context.pushNamed(
+        TuTiDetailScreen.routeName,
+        params: {'tab': 'tuti'},
+        queryParams: {
+          'memberId': memberId.toString(),
+        },
+      );
+    }
   }
 
   Widget _buildSwitchRow(BuildContext context, MemberModel member) {
