@@ -24,8 +24,9 @@ class TuTiCardMobile extends ConsumerStatefulWidget {
 
 class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   late ScrollController _scrollController;
-  int _page = 0;
-  List<MemberModel> _allMembers = [];
+  final List<MemberModel> _allMembers = [];
+  final List<int> _lastMemberIds = [];
+  final List<bool> _hasNextPages = [];
 
   @override
   void initState() {
@@ -36,32 +37,47 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   }
 
   Future<void> _initializeMemberData() async {
-    await getMembersBuilder(page: _page);
-  }
-
-  Future<List<MemberModel>> getMembersBuilder({required int page}) async {
     final memberService = ref.read(memberServiceProvider);
-    print(page);
-    final members = await memberService.getMembers(context, page);
+    final homeData = await memberService.initialGetMembers(context);
+    final members = homeData['members'];
+    final lastMemberId = homeData['last'];
+    final bool hasNext = homeData['hasNext'];
+    _lastMemberIds.add(lastMemberId);
+    _hasNextPages.add(hasNext);
 
     if (members.isNotEmpty) {
       setState(() {
         _allMembers.addAll(members);
       });
     }
-
-    return _allMembers;
   }
 
   void _scrollListener() {
     // 리스트의 맨 아래에 도달했을 때
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      //서버에서 받아온 멤버 객체가 10의 배수일 때만 서버의 다음 페이지에 대한 멤버 정보를 받아옴.
-      if (_allMembers.length % 10 == 0) {
-        _page++;
-        getMembersBuilder(page: _page);
+      print(_hasNextPages.last);
+      if (_hasNextPages.last == true) {
+        getMembersBuilder();
       }
+    }
+  }
+
+  Future<void> getMembersBuilder() async {
+    final memberService = ref.read(memberServiceProvider);
+    print(_lastMemberIds.last);
+    final homeData =
+        await memberService.scrollGetMembers(context, _lastMemberIds.last);
+    final members = homeData['members'];
+    final lastMemberId = homeData['last'];
+    final bool hasNext = homeData['hasNext'];
+    _lastMemberIds.add(lastMemberId);
+    _hasNextPages.add(hasNext);
+
+    if (members.isNotEmpty) {
+      setState(() {
+        _allMembers.addAll(members);
+      });
     }
   }
 
