@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
@@ -123,6 +124,24 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
     );
   }
 
+  Future<String> _getDisplayName(MemberModel member) async {
+    String? authToken = await CustomTokenManager.getToken();
+
+    // 토큰이 없을 때 또는 토큰이 비어있을 때
+    if (authToken == null || authToken.isEmpty) {
+      return _maskName(member.name);
+    } else {
+      return member.name;
+    }
+  }
+
+  String _maskName(String name) {
+    if (name.length >= 3) {
+      return name.replaceRange(1, 2, '*');
+    }
+    return name;
+  }
+
   Widget _buildLeftColumn(BuildContext context, MemberModel member) {
     return Expanded(
       child: Column(
@@ -140,11 +159,21 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           Gaps.h6,
           _buildCircleAvatar(),
           Gaps.h8,
-          TuTiText.small(
-            context,
-            member.name,
-            fontWeight: FontWeight.w800,
-          ),
+          FutureBuilder(
+              future: _getDisplayName(member),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return TuTiText.small(
+                    context,
+                    snapshot.data ?? '',
+                    fontWeight: FontWeight.w800,
+                  );
+                }
+              }),
           Gaps.h12,
           TuTiText.small(
             context,
