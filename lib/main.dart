@@ -52,7 +52,7 @@ class TuTi extends ConsumerWidget {
             unselectedWidgetColor: ColorConstants.primaryColor,
             primaryColor: ColorConstants.primaryColor,
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            fontFamily: 'Gothic A1',
+            fontFamily: 'SB 어그로',
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               backgroundColor: Colors.white,
               elevation: 0,

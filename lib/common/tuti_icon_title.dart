@@ -57,7 +57,6 @@ class TuTiIconTitle extends StatelessWidget {
               style: TextStyle(
                 color: ColorConstants.primaryColor,
                 fontSize: adjustedFontSize,
-                fontWeight: FontWeight.w800,
               ),
             ),
           ),

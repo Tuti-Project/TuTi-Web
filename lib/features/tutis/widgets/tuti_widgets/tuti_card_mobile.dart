@@ -57,7 +57,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
     // 리스트의 맨 아래에 도달했을 때
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      print(_hasNextPages.last);
       if (_hasNextPages.last == true) {
         getMembersBuilder();
       }
@@ -66,7 +65,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
 
   Future<void> getMembersBuilder() async {
     final memberService = ref.read(memberServiceProvider);
-    print(_lastMemberIds.last);
     final homeData =
         await memberService.scrollGetMembers(context, _lastMemberIds.last);
     final members = homeData['members'];
@@ -154,7 +152,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
             context,
             member.applyMatchingStatus == 'ON' ? '매칭 가능' : '재직 중',
             // member.applyMatchingStatus == 'ON' ? '매칭 가능' : member.matchingDescription.isNotEmpty ? member.matchingDescription : '재직 중',
-            fontWeight: FontWeight.w900,
           ),
           Gaps.h6,
           _buildCircleAvatar(),
@@ -170,7 +167,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
                   return TuTiText.small(
                     context,
                     snapshot.data ?? '',
-                    fontWeight: FontWeight.w800,
                   );
                 }
               }),
@@ -180,7 +176,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
             member.university == ''
                 ? '미입력'
                 : '${member.university} / ${member.major}',
-            fontWeight: FontWeight.w800,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -240,7 +235,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         TuTiText.small(
           context,
           member.applyMatchingStatus == 'ON' ? 'on' : 'off',
-          fontWeight: FontWeight.w900,
         ),
       ],
     );
