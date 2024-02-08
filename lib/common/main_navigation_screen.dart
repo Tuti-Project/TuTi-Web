@@ -91,7 +91,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                         ? ColorConstants.primaryColor
                         : Colors.grey,
                   ),
-                  label: '트티 홈',
+                  label: '직무 매칭',
                 ),
                 BottomNavigationBarItem(
                   icon: Image.asset(
