@@ -52,7 +52,7 @@ class TuTiText extends Text {
       data,
       style: TextStyle(
         fontSize: 20.sp,
-        fontWeight: fontWeight ?? FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w700,
         color: color ?? ColorConstants.primaryColor,
       ),
       maxLines: maxLines,
@@ -76,7 +76,7 @@ class TuTiText extends Text {
       data,
       style: TextStyle(
         fontSize: 14.sp,
-        fontWeight: fontWeight ?? FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w400,
         color: color ?? ColorConstants.primaryColor,
         textBaseline: textBaseline,
       ),
@@ -102,7 +102,7 @@ class TuTiText extends Text {
       style: style ??
           TextStyle(
             fontSize: 10.sp,
-            fontWeight: fontWeight ?? FontWeight.w600,
+            fontWeight: fontWeight ?? FontWeight.w300,
             color: color ?? ColorConstants.primaryColor,
           ),
       maxLines: maxLines,

@@ -16,31 +16,31 @@ import 'features/tutis/views/tuti_detail_screen.dart';
 final routerProvider = Provider((ref) {
   return GoRouter(
     initialLocation: TuTiScreen.routePath,
-    redirect: (context, state) async {
-      if (kIsWeb) {
-        String? authToken = await CustomTokenManager.getToken();
-        if (authToken == null || authToken.isEmpty) {
-          if (state.subloc != JoinPrivateScreen.routePath &&
-              state.subloc != JoinScreen.routePath &&
-              state.subloc != LoginScreen.routePath &&
-              state.subloc != HomeScreen.routePath) {
-            return HomeScreen.routePath;
-          }
-        }
-        return null;
-      } else {
-        String? authToken = await FlutterSecureStorageManager.getStorage();
-        if (authToken == null || authToken.isEmpty) {
-          if (state.subloc != JoinPrivateScreen.routePath &&
-              state.subloc != JoinScreen.routePath &&
-              state.subloc != LoginScreen.routePath &&
-              state.subloc != HomeScreen.routePath) {
-            return HomeScreen.routePath;
-          }
-        }
-      }
-      return null;
-    },
+    // redirect: (context, state) async {
+    //   if (kIsWeb) {
+    //     String? authToken = await CustomTokenManager.getToken();
+    //     if (authToken == null || authToken.isEmpty) {
+    //       if (state.subloc != JoinPrivateScreen.routePath &&
+    //           state.subloc != JoinScreen.routePath &&
+    //           state.subloc != LoginScreen.routePath &&
+    //           state.subloc != HomeScreen.routePath) {
+    //         return HomeScreen.routePath;
+    //       }
+    //     }
+    //     return null;
+    //   } else {
+    //     String? authToken = await FlutterSecureStorageManager.getStorage();
+    //     if (authToken == null || authToken.isEmpty) {
+    //       if (state.subloc != JoinPrivateScreen.routePath &&
+    //           state.subloc != JoinScreen.routePath &&
+    //           state.subloc != LoginScreen.routePath &&
+    //           state.subloc != HomeScreen.routePath) {
+    //         return HomeScreen.routePath;
+    //       }
+    //     }
+    //   }
+    //   return null;
+    // },
     routes: [
       GoRoute(
           name: HomeScreen.routeName,

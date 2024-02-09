@@ -39,7 +39,7 @@ class TuTiButton extends StatelessWidget {
         style: TextStyle(
           color: Colors.white,
           fontSize: fontSize ?? 15.sp,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w300,
         ),
       ),
     );

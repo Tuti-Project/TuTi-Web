@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tuti/constants/color.dart';
+import 'package:tuti/features/auth/views/login_screen.dart';
+import 'package:tuti/features/tutis/views/home_screen.dart';
 
 import '../../../../common/tuti_icon_title.dart';
 import '../../../../common/tuti_text.dart';
@@ -18,7 +22,6 @@ class TuTiHeaderMobile extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           TuTiIconTitle(
             title: 'tuti',
@@ -40,6 +43,22 @@ class TuTiHeaderMobile extends StatelessWidget {
                 textAlign: TextAlign.start,
               ),
             ],
+          ),
+          const Spacer(),
+          ElevatedButton(
+            style: const ButtonStyle(
+              backgroundColor:
+                  MaterialStatePropertyAll<Color>(ColorConstants.primaryColor),
+            ),
+            onPressed: () {
+              context.go(HomeScreen.routePath);
+            },
+            child: TuTiText.small(
+              context,
+              '로그인',
+              color: Colors.white,
+              fontWeight: FontWeight.w100,
+            ),
           ),
         ],
       ),

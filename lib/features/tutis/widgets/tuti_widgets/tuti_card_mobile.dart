@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
@@ -56,7 +57,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
     // 리스트의 맨 아래에 도달했을 때
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      print(_hasNextPages.last);
       if (_hasNextPages.last == true) {
         getMembersBuilder();
       }
@@ -65,7 +65,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
 
   Future<void> getMembersBuilder() async {
     final memberService = ref.read(memberServiceProvider);
-    print(_lastMemberIds.last);
     final homeData =
         await memberService.scrollGetMembers(context, _lastMemberIds.last);
     final members = homeData['members'];
@@ -123,6 +122,24 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
     );
   }
 
+  Future<String> _getDisplayName(MemberModel member) async {
+    String? authToken = await CustomTokenManager.getToken();
+
+    // 토큰이 없을 때 또는 토큰이 비어있을 때
+    if (authToken == null || authToken.isEmpty) {
+      return _maskName(member.name);
+    } else {
+      return member.name;
+    }
+  }
+
+  String _maskName(String name) {
+    if (name.length >= 3) {
+      return name.replaceRange(1, 2, '*');
+    }
+    return name;
+  }
+
   Widget _buildLeftColumn(BuildContext context, MemberModel member) {
     return Expanded(
       child: Column(
@@ -135,23 +152,30 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
             context,
             member.applyMatchingStatus == 'ON' ? '매칭 가능' : '재직 중',
             // member.applyMatchingStatus == 'ON' ? '매칭 가능' : member.matchingDescription.isNotEmpty ? member.matchingDescription : '재직 중',
-            fontWeight: FontWeight.w900,
           ),
           Gaps.h6,
           _buildCircleAvatar(),
           Gaps.h8,
-          TuTiText.small(
-            context,
-            member.name,
-            fontWeight: FontWeight.w800,
-          ),
+          FutureBuilder(
+              future: _getDisplayName(member),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return TuTiText.small(
+                    context,
+                    snapshot.data ?? '',
+                  );
+                }
+              }),
           Gaps.h12,
           TuTiText.small(
             context,
             member.university == ''
                 ? '미입력'
                 : '${member.university} / ${member.major}',
-            fontWeight: FontWeight.w800,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -211,7 +235,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         TuTiText.small(
           context,
           member.applyMatchingStatus == 'ON' ? 'on' : 'off',
-          fontWeight: FontWeight.w900,
         ),
       ],
     );

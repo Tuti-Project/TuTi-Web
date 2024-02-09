@@ -98,7 +98,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             '수정',
                             style: TextStyle(
                               fontSize: 10.sp,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w300,
                               color: Colors.grey,
                               decoration: TextDecoration.underline,
                             ),
