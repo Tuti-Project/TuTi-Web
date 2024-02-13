@@ -8,15 +8,18 @@ class TuTiTextFormField extends StatelessWidget {
     required this.hintText,
     this.controller,
     this.limitLength = 50,
+    this.style,
   });
 
   final String hintText;
   final TextEditingController? controller;
   final int limitLength;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: style,
       inputFormatters: [
         LengthLimitingTextInputFormatter(limitLength),
       ],

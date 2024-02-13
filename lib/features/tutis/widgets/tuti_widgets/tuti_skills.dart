@@ -42,12 +42,15 @@ class TuTiSkills extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: TuTiText.small(
-              context,
+            child: Text(
               skill,
-              color: selectedSkill.contains(skill)
-                  ? Colors.white
-                  : ColorConstants.primaryColor,
+              style: TextStyle(
+                  fontFamily: 'Gothic_A1',
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                  color: selectedSkill.contains(skill)
+                      ? Colors.white
+                      : ColorConstants.primaryColor),
             ),
           ),
       ],

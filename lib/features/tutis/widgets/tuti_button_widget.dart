@@ -33,14 +33,13 @@ class TuTiButton extends StatelessWidget {
         ),
       ),
       onPressed: onPressed,
-      child: TuTiText(
+      child: TuTiText.small(
         context,
         title,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: fontSize ?? 15.sp,
-          fontWeight: FontWeight.w300,
-        ),
+        style: Theme.of(context)
+            .textTheme
+            .bodySmall!
+            .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
       ),
     );
   }

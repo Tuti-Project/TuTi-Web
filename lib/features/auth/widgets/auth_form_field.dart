@@ -11,6 +11,7 @@ class AuthFormField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? errorText;
+  final TextStyle? style;
 
   const AuthFormField({
     Key? key,
@@ -23,11 +24,13 @@ class AuthFormField extends StatelessWidget {
     this.controller,
     this.keyboardType,
     this.errorText,
+    this.style,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: style,
       controller: controller,
       obscureText: obscureText,
       autocorrect: !obscureText,
@@ -42,7 +45,7 @@ class AuthFormField extends StatelessWidget {
         border: InputBorder.none,
         hintText: hintText,
         hintStyle: TextStyle(
-            fontSize: 13.sp,
+            fontSize: 12.sp,
             color: Colors.grey,
             textBaseline: TextBaseline.alphabetic),
         focusedBorder: UnderlineInputBorder(

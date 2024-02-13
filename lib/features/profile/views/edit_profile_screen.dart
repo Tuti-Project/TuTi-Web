@@ -214,6 +214,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return sortedDay;
   }
 
+  TextStyle textStyle = TextStyle(
+      fontFamily: 'Gothic_A1',
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w600,
+      color: ColorConstants.primaryColor);
+
   @override
   Widget build(BuildContext context) {
     return ConstraintsScaffold(
@@ -300,7 +306,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
               ),
               Gaps.h20,
-              TuTiText.medium(context, '관심직무',
+              TuTiText.medium(context, '관심 직무 선택',
                   color: ColorConstants.profileColor),
               Gaps.h10,
               _jobs(),
@@ -314,6 +320,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   color: ColorConstants.profileColor),
               Gaps.h10,
               TuTiTextFormField(
+                style: textStyle,
                 controller: _detailController,
                 hintText: '더 자세한 정보를 기입하면 매칭확률이 높아집니다!',
               ),
@@ -340,6 +347,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               if (!_isMatching) Gaps.h10,
               if (!_isMatching)
                 TuTiTextFormField(
+                  style: textStyle,
                   controller: _companyController,
                   hintText: '근무 중인 회사를 입력해주세요!',
                   limitLength: 30,
@@ -351,6 +359,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               _days(),
               Gaps.h10,
               TuTiTextFormField(
+                style: textStyle,
                 controller: _timeController,
                 hintText: '근무 가능 시간을 입력해주세요!',
                 limitLength: 30,
@@ -402,12 +411,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: TuTiText.small(
-                context,
+              child: Text(
                 job,
-                color: _selectedJob.contains(job)
-                    ? Colors.white
-                    : ColorConstants.primaryColor,
+                style: TextStyle(
+                    fontFamily: 'Gothic_A1',
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: _selectedJob.contains(job)
+                        ? Colors.white
+                        : ColorConstants.primaryColor),
               ),
             ),
           ),
@@ -438,12 +450,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: TuTiText.small(
-                context,
+              child: Text(
                 skill,
-                color: _selectedSkill.contains(skill)
-                    ? Colors.white
-                    : ColorConstants.primaryColor,
+                style: TextStyle(
+                    fontFamily: 'Gothic_A1',
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: _selectedSkill.contains(skill)
+                        ? Colors.white
+                        : ColorConstants.primaryColor),
               ),
             ),
           ),
@@ -474,12 +489,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: TuTiText.small(
-                context,
+              child: Text(
                 day,
-                color: _selectedDay.contains(day)
-                    ? Colors.white
-                    : ColorConstants.primaryColor,
+                style: TextStyle(
+                    fontFamily: 'Gothic_A1',
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: _selectedDay.contains(day)
+                        ? Colors.white
+                        : ColorConstants.primaryColor),
               ),
             ),
           ),

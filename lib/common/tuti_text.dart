@@ -50,11 +50,7 @@ class TuTiText extends Text {
     return TuTiText(
       context,
       data,
-      style: TextStyle(
-        fontSize: 20.sp,
-        fontWeight: fontWeight ?? FontWeight.w700,
-        color: color ?? ColorConstants.primaryColor,
-      ),
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color),
       maxLines: maxLines,
       overflow: overflow,
       textAlign: textAlign ?? TextAlign.center,
@@ -64,6 +60,7 @@ class TuTiText extends Text {
   factory TuTiText.medium(
     BuildContext context,
     String data, {
+    TextStyle? style,
     FontWeight? fontWeight,
     Color? color,
     int? maxLines,
@@ -74,12 +71,7 @@ class TuTiText extends Text {
     return TuTiText(
       context,
       data,
-      style: TextStyle(
-        fontSize: 14.sp,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        color: color ?? ColorConstants.primaryColor,
-        textBaseline: textBaseline,
-      ),
+      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: color),
       maxLines: maxLines,
       overflow: overflow,
       textAlign: textAlign ?? TextAlign.center,
@@ -100,11 +92,10 @@ class TuTiText extends Text {
       context,
       data,
       style: style ??
-          TextStyle(
-            fontSize: 10.sp,
-            fontWeight: fontWeight ?? FontWeight.w300,
-            color: color ?? ColorConstants.primaryColor,
-          ),
+          Theme.of(context)
+              .textTheme
+              .bodySmall!
+              .copyWith(color: color, fontWeight: FontWeight.w900),
       maxLines: maxLines,
       overflow: overflow,
       textAlign: textAlign ?? TextAlign.center,
