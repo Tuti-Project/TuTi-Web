@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
+import 'package:tuti/features/tutis/views/personal_branding_screen.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
+import 'package:tuti/features/tutis/widgets/tuti_widgets/main_banner.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/tuti_login_dialog.dart';
 
 import '../../../../common/tuti_text.dart';
@@ -83,42 +86,60 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.8,
+      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      child: CustomScrollView(
         controller: _scrollController,
-        itemCount: _allMembers.length,
-        itemBuilder: (context, index) {
-          final member = _allMembers[index];
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.sp),
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: 250.h,
-                maxHeight: 250.h,
-              ),
-              margin: EdgeInsets.symmetric(vertical: 10.sp),
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    width: 2,
-                    color: ColorConstants.primaryColor,
-                  ),
-                  borderRadius: BorderRadius.circular(45),
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildLeftColumn(context, member),
-                  Gaps.w24,
-                  _buildRightColumn(context, member),
-                ],
-              ),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 80.h,
+            floating: false,
+            pinned: false,
+            flexibleSpace: const FlexibleSpaceBar(
+              background: TuTiBanner(),
             ),
-          );
-        },
+          ),
+          SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            delegate: SliverChildBuilderDelegate(childCount: _allMembers.length,
+                (context, index) {
+              final member = _allMembers[index];
+              print(_allMembers.length);
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: 250.h,
+                    maxHeight: 250.h,
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 10.w),
+                  decoration: ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                        width: 2,
+                        color: ColorConstants.primaryColor,
+                      ),
+                      borderRadius: BorderRadius.circular(45),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildLeftColumn(context, member),
+                      Gaps.w24,
+                      _buildRightColumn(context, member),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          )
+        ],
       ),
     );
   }
@@ -263,7 +284,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         ),
       ),
       child: const CircleAvatar(
-        radius: 50,
+        radius: 25,
         backgroundImage: AssetImage('assets/images/fruit.png'),
         backgroundColor: Colors.transparent,
       ),

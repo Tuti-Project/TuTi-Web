@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
 
 import '../../../constants/gaps.dart';
@@ -13,13 +15,11 @@ class TuTiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ConstraintsScaffold(
+    return ConstraintsScaffold(
       child: Column(
         children: [
-          Gaps.h14,
           TuTiHeaderMobile(),
-          Gaps.h5,
-          TuTiCardMobile(),
+          Flexible(flex: 5, child: TuTiCardMobile()),
         ],
       ),
     );

@@ -13,30 +13,32 @@ class ConstraintsScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Stack(
-          children: [
-            Container(
-              constraints: BoxConstraints(
-                maxWidth: 700.w,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: Stack(
+            children: [
+              Container(
+                constraints: BoxConstraints(
+                  maxWidth: 700.w,
+                ),
+                child: Image.asset(
+                  'assets/images/home_mobile.jpg',
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.asset(
-                'assets/images/home_mobile.jpg',
-                width: double.infinity,
-                height: double.infinity,
-                fit: BoxFit.cover,
+              Container(
+                constraints: BoxConstraints(
+                  maxWidth: 700.w,
+                ),
+                padding: padding,
+                child: child,
               ),
-            ),
-            Container(
-              constraints: BoxConstraints(
-                maxWidth: 700.w,
-              ),
-              padding: padding,
-              child: child,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
