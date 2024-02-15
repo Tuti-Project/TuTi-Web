@@ -17,6 +17,8 @@ class TuTiBanner extends StatelessWidget {
         context.push(PersonalBrandingScreen.routePath);
       },
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: 80.h,
         margin: EdgeInsets.symmetric(horizontal: 15.w),
         decoration: ShapeDecoration(
           color: Colors.white,
@@ -50,7 +52,7 @@ class TuTiBanner extends StatelessWidget {
                   '🤯 인생 고민, 진로 고민 ! 미래에 대한 확신이 들지 않을 때!',
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: ColorConstants.primary600Color,
-                      fontSize: 10.sp,
+                      fontSize: 11.sp,
                       fontWeight: FontWeight.w500),
                 )
               ],
