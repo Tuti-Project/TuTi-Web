@@ -66,6 +66,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 child: AuthFormField(
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontSize: 12.sp),
                   onEditingComplete: () {
                     if (formData['email'] != null &&
                         formData['email']!.isNotEmpty) {
@@ -99,6 +103,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 child: AuthFormField(
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontSize: 12.sp),
                   onEditingComplete: _onSubmitTap,
                   onSaved: (newValue) => formData['password'] = newValue!,
                   validator: (value) {

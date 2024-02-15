@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
+import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/gaps.dart';
 import 'package:tuti/features/profile/models/proifle_model.dart';
@@ -36,6 +37,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final profileService = ref.read(profileServiceProvider);
     final profile = await profileService.getMember(context);
     return profile;
+  }
+
+  Future<String?> _getAuthToken() async {
+    String? authToken = await CustomTokenManager.getToken();
+    return authToken;
   }
 
   @override
@@ -83,22 +89,57 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TuTiText.large(
-                          context,
-                          '${profile.name} 트티 반갑습니다!',
+                        RichText(
+                          text: TextSpan(children: <TextSpan>[
+                            TextSpan(
+                              text: '${profile.name} ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      fontSize: 16.sp,
+                                      color: ColorConstants.profileColor),
+                            ),
+                            TextSpan(
+                              text: '트티 반갑습니다!',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      fontSize: 14.sp,
+                                      color: ColorConstants.primaryColor),
+                            ),
+                          ]),
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            elevation: 0,
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () async {
+                            await CustomTokenManager.removeToken();
+                            setState(() {
+                              _getAuthToken();
+                            });
+                          },
+                          child: TuTiText.small(
+                            context,
+                            '로그아웃',
+                            color: Colors.grey,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
+                        ),
+                        TextButton(
                           onPressed: _editProfile,
                           child: TuTiText.small(
                             context,
                             '수정',
+                            color: Colors.grey,
                             style: TextStyle(
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w300,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
                               color: Colors.grey,
                               decoration: TextDecoration.underline,
                             ),
@@ -143,8 +184,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ),
                     Gaps.h20,
-                    TuTiText.medium(context, '관심직무',
-                        color: ColorConstants.profileColor),
+                    Text(
+                      '관심 직무 선택',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: ColorConstants.profileColor),
+                    ),
                     Gaps.h10,
                     if (profile.jobTags.isEmpty)
                       const TuTiContainer(
@@ -152,8 +198,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     if (profile.jobTags.isNotEmpty) TuTiJobs(profile: profile),
                     Gaps.h20,
-                    TuTiText.medium(context, '활용 능력',
-                        color: ColorConstants.profileColor),
+                    Text(
+                      '활용 능력',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: ColorConstants.profileColor),
+                    ),
                     Gaps.h10,
                     if (profile.skillTags.isEmpty)
                       const TuTiContainer(
@@ -162,8 +213,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     if (profile.skillTags.isNotEmpty)
                       TuTiSkills(profile: profile),
                     Gaps.h20,
-                    TuTiText.medium(context, '상세 설명 및 자격증',
-                        color: ColorConstants.profileColor),
+                    Text(
+                      '상세 설명 및 자격증',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: ColorConstants.profileColor),
+                    ),
                     Gaps.h10,
                     TuTiContainer(
                       text: profile.description.isEmpty
@@ -174,8 +230,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TuTiText.medium(context, '직무매칭 인턴 신청 여부',
-                            color: ColorConstants.profileColor),
+                        Text(
+                          '직무매칭 인턴 신청 여부',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: ColorConstants.profileColor),
+                        ),
                         IgnorePointer(
                           child: Transform.scale(
                             scale: 0.8,
@@ -194,8 +255,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         text: profile.matchingDescription,
                       ),
                     Gaps.h20,
-                    TuTiText.medium(context, '대면 업무 가능 시간',
-                        color: ColorConstants.profileColor),
+                    Text(
+                      '대면 업무 가능 시간',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: ColorConstants.profileColor),
+                    ),
                     Gaps.h10,
                     TuTiDays(profile: profile),
                     Gaps.h10,

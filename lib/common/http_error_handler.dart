@@ -26,7 +26,7 @@ class HttpErrorHandler {
         context.go('/home');
       }
     } else {
-      TuTiSnackBar.showSnackBar(context, data['message'].toString());
+      // TuTiSnackBar.showSnackBar(context, data['message'].toString());
     }
   }
 }

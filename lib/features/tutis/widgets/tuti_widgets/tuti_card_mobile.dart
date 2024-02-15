@@ -7,6 +7,7 @@ import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
+import 'package:tuti/features/tutis/widgets/tuti_widgets/tuti_login_dialog.dart';
 
 import '../../../../common/tuti_text.dart';
 import '../../../../constants/color.dart';
@@ -193,7 +194,19 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           _buildKeywordsWrap(member),
           TuTiButton(
             title: '더보기',
-            onPressed: () => _getDetailProfile(member.memberId),
+            onPressed: () async {
+              String? authToken = await CustomTokenManager.getToken();
+              if (authToken == null || authToken.isEmpty) {
+                if (context.mounted) {
+                  showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) => const LoginIntroDialog(),
+                  );
+                }
+              } else {
+                _getDetailProfile(member.memberId);
+              }
+            },
             padding: EdgeInsets.symmetric(
               horizontal: 35.w,
             ),
