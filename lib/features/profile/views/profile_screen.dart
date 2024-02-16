@@ -5,12 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
 import 'package:tuti/common/custom_token_manager.dart';
+import 'package:tuti/common/main_navigation_screen.dart';
+import 'package:tuti/common/service/navigation_index_provder.dart';
 import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/gaps.dart';
 import 'package:tuti/features/profile/models/proifle_model.dart';
 import 'package:tuti/features/profile/services/proifle_service.dart';
 import 'package:tuti/features/profile/widgets/tuti_container.dart';
 import 'package:tuti/features/profile/widgets/tuti_profile.dart';
+import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
 import '../../../constants/color.dart';
 import '../../tutis/widgets/tuti_widgets/tuti_days.dart';
@@ -115,9 +118,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         TextButton(
                           onPressed: () async {
                             await CustomTokenManager.removeToken();
-                            setState(() {
-                              _getAuthToken();
-                            });
+                            ref
+                                .read(navigationSelectedIndexProvider.notifier)
+                                .state = 1;
                           },
                           child: TuTiText.small(
                             context,
