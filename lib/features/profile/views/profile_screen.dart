@@ -7,6 +7,7 @@ import 'package:tuti/common/constraints_scaffold.dart';
 import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/main_navigation_screen.dart';
 import 'package:tuti/common/service/navigation_index_provder.dart';
+import 'package:tuti/common/service/token_provider.dart';
 import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/gaps.dart';
 import 'package:tuti/features/profile/models/proifle_model.dart';
@@ -118,6 +119,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         TextButton(
                           onPressed: () async {
                             await CustomTokenManager.removeToken();
+                            ref.read(tokenProvider.notifier).state =
+                                TokenState.absent;
                             ref
                                 .read(navigationSelectedIndexProvider.notifier)
                                 .state = 1;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
+import 'package:tuti/common/service/token_provider.dart';
 import 'package:tuti/features/auth/services/auth_service.dart';
 import 'package:tuti/features/auth/widgets/auth_form_field.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
@@ -32,6 +33,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         final authService = ref.read(authServiceProvider);
         await authService.login(
             context, formData['email']!, formData['password']!);
+        ref.read(tokenProvider.notifier).state = TokenState.present;
       }
     }
   }
