@@ -30,9 +30,7 @@ class _TuTiHeaderMobileState extends State<TuTiHeaderMobile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 20.w,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 20.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

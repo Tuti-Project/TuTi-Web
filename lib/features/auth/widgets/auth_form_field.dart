@@ -44,7 +44,7 @@ class AuthFormField extends StatelessWidget {
         errorText: errorText,
         border: InputBorder.none,
         hintText: hintText,
-        hintStyle: TextStyle(
+        hintStyle: Theme.of(context).textTheme.titleSmall!.copyWith(
             fontSize: 12.sp,
             color: Colors.grey,
             textBaseline: TextBaseline.alphabetic),

@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tuti/common/flutter_security_storage_manager.dart';
+import 'package:tuti/common/service/tab_provider.dart';
 import 'package:tuti/features/tutis/views/home_screen.dart';
 import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
-import 'common/custom_token_manager.dart';
 import 'common/main_navigation_screen.dart';
 import 'features/auth/views/join_private_screen.dart';
 import 'features/auth/views/join_screen.dart';
@@ -62,8 +60,9 @@ final routerProvider = Provider((ref) {
         name: MainNavigationScreen.routeName,
         path: "/:tab(personalBranding|tuti|profile)",
         builder: (context, state) {
-          final tab = state.params["tab"] ?? "tuti";
-          return MainNavigationScreen(tab: tab);
+          String tab = state.params['tab'] ?? 'tuti';
+          ref.read(tabsProvider.notifier).state = tab;
+          return const MainNavigationScreen();
         },
         routes: [
           GoRoute(

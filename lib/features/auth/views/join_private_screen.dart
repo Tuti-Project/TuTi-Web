@@ -128,23 +128,26 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
   final Set<Terms> _agreeToTerms = {};
 
   void _toggleSingleTerm(Terms term) {
-    if (_isAllTermsAgreed()) return _agreeToTerms.clear();
-    if (_agreeToTerms.contains(Terms.allTerms)) {
-      _agreeToTerms.clear();
-    } else {
-      if (_agreeToTerms.contains(term)) {
-        _agreeToTerms.remove(term);
+    if (term == Terms.allTerms) {
+      if (_agreeToTerms.contains(Terms.allTerms)) {
+        _agreeToTerms.clear();
       } else {
-        _agreeToTerms.add(term);
+        _agreeToTerms.addAll(Terms.values);
       }
+    } else {
+      if (_agreeToTerms.contains(Terms.allTerms)) {
+        _agreeToTerms.remove(Terms.allTerms);
+      }
+      _agreeToTerms.contains(term)
+          ? _agreeToTerms.remove(term)
+          : _agreeToTerms.add(term);
     }
   }
 
   // _aggreeToTerms에 모든 항목이 포함되어 있는지 확인
   bool _isAllTermsAgreed() {
     return _agreeToTerms.contains(Terms.allTerms) ||
-        _agreeToTerms.containsAll(Terms.values) ||
-        _agreeToTerms.length == Terms.values.length - 1;
+        _agreeToTerms.containsAll(Terms.values);
   }
 
   bool _isTermsAgreed(Terms term) {
@@ -393,6 +396,10 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
                         ),
                       ),
                       child: AuthFormField(
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.w600),
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         onEditingComplete: () {
@@ -421,6 +428,10 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
                         ),
                       ),
                       child: AuthFormField(
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.w600),
                         controller: _passwordController,
                         obscureText: true,
                         onEditingComplete: () {
@@ -449,6 +460,10 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
                         ),
                       ),
                       child: AuthFormField(
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.w600),
                         controller: _passwordCheckController,
                         obscureText: true,
                         onEditingComplete: () {
@@ -477,6 +492,10 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
                         ),
                       ),
                       child: AuthFormField(
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.w600),
                         controller: _nameController,
                         onEditingComplete: () {
                           if (_name.isNotEmpty) {
