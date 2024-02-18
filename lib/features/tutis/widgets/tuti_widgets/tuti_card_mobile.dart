@@ -97,7 +97,11 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
             floating: false,
             pinned: false,
             flexibleSpace: const FlexibleSpaceBar(
-              background: TuTiBanner(),
+              background: TuTiBanner(
+                location: PersonalBrandingScreen.routePath,
+                title: '[공지]\n트티 강점 발견 연구소 1기 모집 중!',
+                subtitle: '🤯 인생 고민, 진로 고민 ! 미래에 대한 확신이 들지 않을 때!',
+              ),
             ),
           ),
           SliverGrid(

@@ -101,7 +101,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
                         ? ColorConstants.primaryColor
                         : Colors.grey,
                   ),
-                  label: '퍼스널브랜딩',
+                  label: '판매 서비스',
                 ),
                 BottomNavigationBarItem(
                   icon: Image.asset(
@@ -111,7 +111,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
                         ? ColorConstants.primaryColor
                         : Colors.grey,
                   ),
-                  label: '직무 매칭',
+                  label: '트티 홈',
                 ),
                 BottomNavigationBarItem(
                   icon: Image.asset(
