@@ -1,10 +1,10 @@
-class GoodsCard {
+class Goods {
   final String title;
   final double? regularPrice;
   final double? discountRate;
   final double discountedPrice;
 
-  const GoodsCard(
+  const Goods(
       {required this.title,
       required this.discountedPrice,
       this.discountRate,
