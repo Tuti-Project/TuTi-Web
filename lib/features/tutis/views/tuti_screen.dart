@@ -15,7 +15,7 @@ class TuTiScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstraintsScaffold(
+    return const ConstraintsScaffold(
       child: Column(
         children: [
           TuTiHeaderMobile(),

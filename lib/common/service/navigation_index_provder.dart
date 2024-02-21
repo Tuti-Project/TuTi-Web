@@ -8,7 +8,7 @@ final navigationSelectedIndexProvider = StateProvider<int>((ref) {
     'profile',
   ];
 
-  final tab = ref.watch(tabsProvider);
+  final tab = ref.read(tabsProvider);
 
   int selectedIndex = tabs.indexOf(tab);
   return selectedIndex;
