@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
 import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/color.dart';
-import 'package:tuti/features/tutis/models/goods_card.dart';
+import 'package:tuti/features/tutis/models/goods.dart';
 import 'package:tuti/features/tutis/views/goods_detail_screen.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/goods_container.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/main_banner.dart';
