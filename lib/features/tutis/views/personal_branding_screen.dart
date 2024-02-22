@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
+import 'package:tuti/common/service/goods_provider.dart';
 import 'package:tuti/common/tuti_text.dart';
 import 'package:tuti/constants/color.dart';
 import 'package:tuti/features/tutis/models/goods.dart';
@@ -11,14 +13,16 @@ import 'package:tuti/features/tutis/widgets/tuti_widgets/goods_container.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/main_banner.dart';
 import 'package:universal_html/js.dart';
 
-class PersonalBrandingScreen extends StatelessWidget {
+class PersonalBrandingScreen extends ConsumerWidget {
   const PersonalBrandingScreen({super.key});
 
   static const String routeName = "personalBranding";
   static const String routePath = "/personalBranding";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<List<Goods>> goodsList = ref.watch(goodsProvider);
+
     return ConstraintsScaffold(
       child: Column(
         children: [
@@ -31,30 +35,23 @@ class PersonalBrandingScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: goodsCards.length,
-              itemBuilder: (BuildContext context, index) {
-                return GoodsContainer(
-                    title: goodsCards[index].title,
-                    regularPrice: goodsCards[index].regularPrice,
-                    discountRate: goodsCards[index].discountRate,
-                    discountedPrice: goodsCards[index].discountedPrice);
-              },
-            ),
+            child: switch (goodsList) {
+              AsyncData(:final value) => ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) => GoodsContainer(
+                    name: value[index].name,
+                    discountRate: value[index].discountRate,
+                    regularPrice: value[index].regularPrice,
+                    discountedPrice: value[index].discountedPrice,
+                    discountPolicy: value[index].discountPolicy,
+                  ),
+                ),
+              AsyncError() => const Text('Oops, something unexpected happened'),
+              _ => const CircularProgressIndicator(),
+            },
           ),
         ],
       ),
     );
   }
 }
-
-List<Goods> goodsCards = const [
-  Goods(
-      title: '강점 발견 연구소 1기',
-      regularPrice: 600000,
-      discountRate: 50,
-      discountedPrice: 300000),
-  Goods(title: '발표잘하는 방법 특강 1회', discountedPrice: 250000),
-  Goods(title: '[건축학과] 공모전 컨설팅', discountedPrice: 250000),
-  Goods(title: '내 성격에 맞는\n외모 스타일링 컨설팅', discountedPrice: 250000),
-];

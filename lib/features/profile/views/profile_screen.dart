@@ -119,8 +119,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         TextButton(
                           onPressed: () async {
                             await CustomTokenManager.removeToken();
-                            ref.read(tokenProvider.notifier).state =
-                                TokenState.absent;
+                            ref.read(tokenProvider.notifier).state = '';
                             ref
                                 .read(navigationSelectedIndexProvider.notifier)
                                 .state = 1;

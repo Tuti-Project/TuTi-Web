@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
+import 'package:tuti/common/custom_token_manager.dart';
+import 'package:tuti/common/service/token_provider.dart';
 import 'package:tuti/features/auth/models/user_profile_model.dart';
 import 'package:tuti/features/auth/widgets/auth_form_field.dart';
 
@@ -176,6 +178,10 @@ class _JoinPrivateScreenState extends ConsumerState<JoinPrivateScreen> {
       );
       final authService = ref.read(authServiceProvider);
       await authService.signUp(context, userProfileModel);
+      final token = await CustomTokenManager.getToken();
+      print('로그인 시 저장되는 토큰: $token');
+
+      ref.read(tokenProvider.notifier).state = token;
       if (context.mounted) {
         context.goNamed(TuTiScreen.routeName);
       }

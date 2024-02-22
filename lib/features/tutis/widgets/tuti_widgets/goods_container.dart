@@ -8,15 +8,17 @@ import 'package:tuti/constants/color.dart';
 class GoodsContainer extends StatelessWidget {
   const GoodsContainer(
       {super.key,
-      required this.title,
+      required this.name,
       required this.discountedPrice,
       this.discountRate,
-      this.regularPrice});
+      this.regularPrice,
+      this.discountPolicy});
 
-  final String title;
+  final String name;
   final double? regularPrice;
   final double? discountRate;
   final double discountedPrice;
+  final String? discountPolicy;
 
   @override
   Widget build(BuildContext context) {
@@ -39,37 +41,62 @@ class GoodsContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              name,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
                   .copyWith(color: Colors.white),
             ),
-            if (regularPrice != null)
-              Text(
-                numberFormat.format(regularPrice),
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Colors.white,
-                    fontSize: 22.sp,
-                    decoration: TextDecoration.lineThrough,
-                    decorationColor:
-                        ColorConstants.personalBrandingDividerColor,
-                    decorationThickness: 2.0),
+            if (discountPolicy == '정액')
+              Column(
+                children: [
+                  Text(
+                    numberFormat.format(regularPrice),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                        fontSize: 22.sp,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor:
+                            ColorConstants.personalBrandingDividerColor,
+                        decorationThickness: 2.0),
+                  ),
+                  Text(
+                    '${numberFormat.format(discountRate)}원 할인',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: 18.sp,
+                        color:
+                            ColorConstants.personalBrandingTextHighlightColor),
+                  ),
+                ],
               ),
-            if (regularPrice == null)
-              RSizedBox(
-                height: 35.w,
+            if (discountPolicy == '정률')
+              Column(
+                children: [
+                  Text(
+                    numberFormat.format(regularPrice),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Colors.white,
+                        fontSize: 22.sp,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor:
+                            ColorConstants.personalBrandingDividerColor,
+                        decorationThickness: 2.0),
+                  ),
+                  Text(
+                    '${numberFormat.format(discountRate)}% 할인',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: 18.sp,
+                        color:
+                            ColorConstants.personalBrandingTextHighlightColor),
+                  ),
+                ],
               ),
-            if (discountRate != null)
-              Text(
-                '${numberFormat.format(discountRate)}%할인',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontSize: 18.sp,
-                    color: ColorConstants.personalBrandingTextHighlightColor),
-              ),
-            if (discountRate == null)
-              RSizedBox(
-                height: 35.w,
+            if (discountPolicy == '없음')
+              Column(
+                children: [
+                  RSizedBox(height: 35.w),
+                  RSizedBox(height: 35.w),
+                ],
               ),
             Text(
               numberFormat.format(discountedPrice),

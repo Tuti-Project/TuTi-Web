@@ -162,6 +162,10 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
   String _maskName(String name) {
     if (name.length >= 3) {
       return name.replaceRange(1, 2, '*');
+    } else if (name.length == 2) {
+      String firstName = name.substring(0, 1);
+      String maskName = firstName + "*";
+      return maskName;
     }
     return name;
   }
@@ -183,19 +187,24 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           _buildCircleAvatar(),
           Gaps.h8,
           FutureBuilder(
-              future: _getDisplayName(member),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
+            future: _getDisplayName(member),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox();
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
                   return TuTiText.small(
                     context,
                     snapshot.data ?? '',
                   );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
                 }
-              }),
+              }
+              return const SizedBox();
+            },
+          ),
           Gaps.h12,
           TuTiText.small(
             context,
