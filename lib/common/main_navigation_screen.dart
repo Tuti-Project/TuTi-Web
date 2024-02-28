@@ -31,13 +31,6 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   Widget build(BuildContext context) {
     int selectedIndex = ref.watch(navigationSelectedIndexProvider);
 
-    void navigationToScreen(int index) {
-      setState(() {
-        // 유저가 클릭한 index를 navigationSelectedIndexProvider의 state에 할당
-        ref.read(navigationSelectedIndexProvider.notifier).state = index;
-      });
-    }
-
     void onTap(int index) async {
       // 유저가 마이페이지로 이동 시 authToken이 있는지 검증
       // 토큰이 null || 비어있으면 로그인 안내 다이얼로그 띄움.
@@ -51,11 +44,11 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
             );
           }
         } else {
-          navigationToScreen(index);
+          ref.read(navigationSelectedIndexProvider.notifier).state = index;
         }
-        // 마이페이지로 이동하는 것이 아닐 때는 바로 이동
       } else {
-        navigationToScreen(index);
+        // 마이페이지로 이동하는 것이 아닐 때는 바로 이동
+        ref.read(navigationSelectedIndexProvider.notifier).state = index;
       }
     }
 
