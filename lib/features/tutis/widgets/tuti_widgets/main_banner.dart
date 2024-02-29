@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tuti/common/custom_token_manager.dart';
+import 'package:tuti/common/service/navigation_index_provder.dart';
+import 'package:tuti/common/service/token_provider.dart';
 import 'package:tuti/constants/color.dart';
 import 'package:tuti/constants/gaps.dart';
 
-class TuTiBanner extends StatelessWidget {
+class TuTiBanner extends ConsumerWidget {
   const TuTiBanner(
       {super.key,
-      required this.location,
+      required this.onTap,
       required this.title,
       required this.subtitle});
 
-  final String location;
+  final VoidCallback onTap;
   final String title;
   final String subtitle;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () {
-        context.push(location);
-      },
+      onTap: onTap,
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10.w),
         padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 10.h),
-        margin: EdgeInsets.symmetric(horizontal: 20.w),
         height: 80.h,
         decoration: ShapeDecoration(
           color: Colors.white,
