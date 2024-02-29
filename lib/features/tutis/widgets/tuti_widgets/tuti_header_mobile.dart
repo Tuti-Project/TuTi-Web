@@ -71,7 +71,7 @@ class _TuTiHeaderMobileState extends ConsumerState<TuTiHeaderMobile> {
                       token.isEmpty) {
                     return TuTiButton(
                       padding: EdgeInsets.symmetric(
-                          vertical: 7.5.h, horizontal: 18.w),
+                          vertical: 7.5.h, horizontal: 25.w),
                       fontSize: 10.sp,
                       title: '로그인',
                       onPressed: () => _showLoginDialog(context),

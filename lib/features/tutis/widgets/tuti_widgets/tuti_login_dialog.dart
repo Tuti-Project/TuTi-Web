@@ -14,7 +14,7 @@ class LoginIntroDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        constraints: BoxConstraints(maxWidth: 350.w, maxHeight: 500.h),
+        constraints: BoxConstraints(maxWidth: 350.w, maxHeight: 530.h),
         padding: EdgeInsets.fromLTRB(40.w, 30.h, 40.w, 30.h),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -72,17 +72,17 @@ Widget loginIntroButtonCollection(BuildContext context) {
     children: [
       loginButtonTemplete(context,
           foregroundText: '로그인하기', routePath: '/login'),
-      Gaps.h8,
+      Gaps.h4,
       loginButtonTemplete(context,
           foregroundText: '회원가입하기', routePath: '/join'),
-      Gaps.h8,
+      Gaps.h4,
       socialLoginButton(
         context,
         foregroundText: '카카오 로그인하기',
         imagePath: 'assets/images/kakao.png',
         backGroundColor: ColorConstants.kakaoColor,
       ),
-      Gaps.h8,
+      Gaps.h4,
       socialLoginButton(context,
           foregroundText: '네이버 로그인하기',
           imagePath: 'assets/images/naver.png',
