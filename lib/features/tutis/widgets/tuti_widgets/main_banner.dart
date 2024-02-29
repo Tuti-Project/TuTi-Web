@@ -22,7 +22,8 @@ class TuTiBanner extends StatelessWidget {
         context.push(location);
       },
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
+        padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 10.h),
+        margin: EdgeInsets.symmetric(horizontal: 20.w),
         height: 80.h,
         decoration: ShapeDecoration(
           color: Colors.white,

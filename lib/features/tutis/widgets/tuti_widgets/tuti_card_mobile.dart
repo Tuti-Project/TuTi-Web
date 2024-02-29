@@ -86,8 +86,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.8,
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       child: CustomScrollView(
         controller: _scrollController,
@@ -111,7 +110,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
             delegate: SliverChildBuilderDelegate(childCount: _allMembers.length,
                 (context, index) {
               final member = _allMembers[index];
-              print(_allMembers.length);
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
                 child: Container(
@@ -119,7 +117,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
                     minHeight: 250.h,
                     maxHeight: 250.h,
                   ),
-                  margin: EdgeInsets.symmetric(vertical: 10.w),
+                  margin: EdgeInsets.symmetric(vertical: 20.w),
                   decoration: ShapeDecoration(
                     color: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -197,6 +195,10 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
                   return TuTiText.small(
                     context,
                     snapshot.data ?? '',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w900),
                   );
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
@@ -213,6 +215,10 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
                 : '${member.university} / ${member.major}',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w900),
           ),
         ],
       ),
@@ -319,8 +325,8 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           for (var job in jobTags)
             TuTiIcon(
               title: job,
-              fontSize: 11.sp,
-              iconHeight: 100.h,
+              fontSize: 10.sp,
+              iconHeight: 50.h,
             ),
         ],
       ),
