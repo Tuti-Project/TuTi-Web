@@ -113,7 +113,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
               (context, index) {
             final member = _allMembers[index];
             return Container(
-              margin: EdgeInsets.symmetric(vertical: 20.w, horizontal: 8.w),
+              margin: EdgeInsets.all(8.w),
               decoration: ShapeDecoration(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
