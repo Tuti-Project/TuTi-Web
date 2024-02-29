@@ -36,10 +36,8 @@ class TuTiButton extends StatelessWidget {
       child: TuTiText.small(
         context,
         title,
-        style: Theme.of(context)
-            .textTheme
-            .bodySmall!
-            .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            color: Colors.white, fontWeight: FontWeight.w800, fontSize: 10.sp),
       ),
     );
   }

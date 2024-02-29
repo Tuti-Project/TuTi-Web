@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/custom_token_manager.dart';
+import 'package:tuti/common/service/navigation_index_provder.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/views/personal_branding_screen.dart';
@@ -86,63 +87,58 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 80.h,
-            floating: false,
-            pinned: false,
-            flexibleSpace: const FlexibleSpaceBar(
-              background: TuTiBanner(
-                location: PersonalBrandingScreen.routePath,
-                title: '[공지]\n트티 강점 발견 연구소 1기 모집 중!',
-                subtitle: '🤯 인생 고민, 진로 고민 ! 미래에 대한 확신이 들지 않을 때!',
-              ),
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 80.h,
+          floating: false,
+          pinned: false,
+          flexibleSpace: FlexibleSpaceBar(
+            background: TuTiBanner(
+              onTap: () {
+                // 판매페이지 탭으로 이동
+                ref.read(navigationSelectedIndexProvider.notifier).state = 0;
+              },
+              title: '[공지]\n트티 강점 발견 연구소 1기 모집 중!',
+              subtitle: '🤯 인생 고민, 진로 고민 ! 미래에 대한 확신이 들지 않을 때!',
             ),
           ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            delegate: SliverChildBuilderDelegate(childCount: _allMembers.length,
-                (context, index) {
-              final member = _allMembers[index];
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Container(
-                  constraints: BoxConstraints(
-                    minHeight: 250.h,
-                    maxHeight: 250.h,
+        ),
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          delegate: SliverChildBuilderDelegate(childCount: _allMembers.length,
+              (context, index) {
+            final member = _allMembers[index];
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 20.w, horizontal: 8.w),
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                    width: 2,
+                    color: ColorConstants.primaryColor,
                   ),
-                  margin: EdgeInsets.symmetric(vertical: 20.w),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        width: 2,
-                        color: ColorConstants.primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(45),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildLeftColumn(context, member),
-                      Gaps.w24,
-                      _buildRightColumn(context, member),
-                    ],
-                  ),
+                  borderRadius: BorderRadius.circular(45),
                 ),
-              );
-            }),
-          )
-        ],
-      ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(7.w),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildLeftColumn(context, member),
+                    _buildRightColumn(context, member),
+                  ],
+                ),
+              ),
+            );
+          }),
+        )
+      ],
     );
   }
 
@@ -175,9 +171,12 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildSwitchRow(context, member),
-          Gaps.h10,
           TuTiText.small(
             context,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(fontSize: 10.sp, fontWeight: FontWeight.w800),
             member.applyMatchingStatus == 'ON' ? '매칭 가능' : '재직 중',
             // member.applyMatchingStatus == 'ON' ? '매칭 가능' : member.matchingDescription.isNotEmpty ? member.matchingDescription : '재직 중',
           ),
@@ -204,21 +203,21 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
                   return Text('Error: ${snapshot.error}');
                 }
               }
-              return const SizedBox();
+              return const SizedBox.shrink();
             },
           ),
-          Gaps.h12,
+          Gaps.h6,
           TuTiText.small(
             context,
             member.university == ''
                 ? '미입력'
-                : '${member.university} / ${member.major}',
+                : '${member.university}\n${member.major}',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
-                .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w900),
+                .copyWith(fontSize: 8.sp, fontWeight: FontWeight.w900),
           ),
         ],
       ),
@@ -233,6 +232,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         children: [
           _buildKeywordsWrap(member),
           TuTiButton(
+            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
             title: '더보기',
             onPressed: () async {
               String? authToken = await CustomTokenManager.getToken();
@@ -247,9 +247,6 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
                 _getDetailProfile(member.memberId);
               }
             },
-            padding: EdgeInsets.symmetric(
-              horizontal: 35.w,
-            ),
             fontSize: 10.sp,
           ),
           Gaps.h16,
@@ -325,8 +322,8 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           for (var job in jobTags)
             TuTiIcon(
               title: job,
-              fontSize: 10.sp,
-              iconHeight: 50.h,
+              fontSize: 9.sp,
+              iconHeight: 60.h,
             ),
         ],
       ),

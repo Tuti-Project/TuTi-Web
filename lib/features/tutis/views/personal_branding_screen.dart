@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tuti/common/constraints_scaffold.dart';
 import 'package:tuti/common/service/goods_provider.dart';
 import 'package:tuti/common/tuti_text.dart';
@@ -28,8 +29,8 @@ class PersonalBrandingScreen extends ConsumerWidget {
         children: [
           Container(
             margin: EdgeInsets.only(top: 35.h, bottom: 15.h),
-            child: const TuTiBanner(
-              location: GoodsDetailScreen.routePath,
+            child: TuTiBanner(
+              onTap: () {},
               title: '오직, 트티에서만 제공하는\n2024년 당신의 커리어 고민 해결 솔루션.',
               subtitle: '체계적이고 알찬 개인 맞춤형 레벨업!',
             ),
@@ -47,6 +48,7 @@ class PersonalBrandingScreen extends ConsumerWidget {
                   ),
                 ),
               AsyncError() => const Text('Oops, something unexpected happened'),
+              AsyncLoading() => const CircularProgressIndicator(),
               _ => const CircularProgressIndicator(),
             },
           ),
