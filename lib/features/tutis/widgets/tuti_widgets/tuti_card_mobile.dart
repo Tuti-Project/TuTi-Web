@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/custom_token_manager.dart';
 import 'package:tuti/common/service/navigation_index_provder.dart';
+import 'package:tuti/common/service/token_provider.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
 import 'package:tuti/features/tutis/views/personal_branding_screen.dart';
@@ -142,29 +143,20 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
     );
   }
 
-  Future<String> _getDisplayName(MemberModel member) async {
-    String? authToken = await CustomTokenManager.getToken();
-
-    // 토큰이 없을 때 또는 토큰이 비어있을 때
-    if (authToken == null || authToken.isEmpty) {
-      return _maskName(member.name);
-    } else {
-      return member.name;
-    }
-  }
-
-  String _maskName(String name) {
-    if (name.length >= 3) {
-      return name.replaceRange(1, 2, '*');
-    } else if (name.length == 2) {
-      String firstName = name.substring(0, 1);
-      String maskName = firstName + "*";
-      return maskName;
-    }
-    return name;
-  }
-
   Widget _buildLeftColumn(BuildContext context, MemberModel member) {
+    String? token = ref.watch(tokenProvider);
+
+    String _maskName(String name) {
+      if (name.length >= 3) {
+        return name.replaceRange(1, 2, '*');
+      } else if (name.length == 2) {
+        String firstName = name.substring(0, 1);
+        String maskName = firstName + "*";
+        return maskName;
+      }
+      return name;
+    }
+
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,28 +175,15 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
           Gaps.h6,
           _buildCircleAvatar(),
           Gaps.h8,
-          FutureBuilder(
-            future: _getDisplayName(member),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox();
-              }
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return TuTiText.small(
-                    context,
-                    snapshot.data ?? '',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w900),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
-              }
-              return const SizedBox.shrink();
-            },
+          TuTiText.small(
+            context,
+            token == null || token.isEmpty
+                ? _maskName(member.name)
+                : member.name,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(fontSize: 9.sp, fontWeight: FontWeight.w900),
           ),
           Gaps.h6,
           TuTiText.small(

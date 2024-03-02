@@ -24,7 +24,7 @@ class LoginIntroDialog extends StatelessWidget {
           children: [
             Align(
                 alignment: Alignment.topLeft, child: loginSheetTexts(context)),
-            Gaps.h36,
+            Gaps.h28,
             Align(
                 alignment: Alignment.centerRight,
                 child: loginIntroButtonCollection(context)),
@@ -96,31 +96,34 @@ Widget socialLoginButton(BuildContext context,
     String? imagePath,
     Color? backGroundColor,
     VoidCallback? onPressed}) {
-  return ElevatedButton(
-    // 카카오, 네이버 로그인하기 구현 시 onPressed 작성
-    onPressed: () {},
-    style: ElevatedButton.styleFrom(
-      backgroundColor: backGroundColor,
-      fixedSize: Size(180.w, 30.h),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        RSizedBox(
-          width: 14.w,
-          height: 14.h,
-          child: Image.asset(imagePath!),
-        ),
-        Gaps.w4,
-        TuTiText.small(
-          context,
-          foregroundText!,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(fontSize: 12.sp, color: Colors.white),
-        ),
-      ],
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 4.h),
+    child: ElevatedButton(
+      // 카카오, 네이버 로그인하기 구현 시 onPressed 작성
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backGroundColor,
+        fixedSize: Size(180.w, 30.h),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RSizedBox(
+            width: 14.w,
+            height: 14.h,
+            child: Image.asset(imagePath!),
+          ),
+          Gaps.w4,
+          TuTiText.small(
+            context,
+            foregroundText!,
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(fontSize: 12.sp, color: Colors.white),
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -131,17 +134,20 @@ Widget loginButtonTemplete(BuildContext context,
       fixedSize: Size(180.w, 30.h),
       backgroundColor: ColorConstants.primaryColor,
       foregroundColor: Colors.white);
-  return ElevatedButton(
-    onPressed: () {
-      context.go(routePath!);
-    },
-    style: buttonStyle,
-    child: Text(
-      foregroundText!,
-      style: Theme.of(context)
-          .textTheme
-          .titleSmall!
-          .copyWith(fontSize: 12.sp, color: Colors.white),
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 4.h),
+    child: ElevatedButton(
+      onPressed: () {
+        context.go(routePath!);
+      },
+      style: buttonStyle,
+      child: Text(
+        foregroundText!,
+        style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(fontSize: 12.sp, color: Colors.white),
+      ),
     ),
   );
 }
