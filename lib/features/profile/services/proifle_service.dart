@@ -19,10 +19,7 @@ class ProfileService {
       Response? response;
       if (memberId != null) {
         response = await _dio.get(
-          '${StringConstants.baseUrl}/member/{memberId}',
-          queryParameters: {
-            'memberId': memberId,
-          },
+          '${StringConstants.baseUrl}/member/$memberId',
         );
       } else {
         response = await _dio.get('${StringConstants.baseUrl}/my-page');

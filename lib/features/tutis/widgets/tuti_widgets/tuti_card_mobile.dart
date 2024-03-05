@@ -211,7 +211,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         children: [
           _buildKeywordsWrap(member),
           TuTiButton(
-            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
+            padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 15.w),
             title: '더보기',
             onPressed: () async {
               String? authToken = await CustomTokenManager.getToken();
@@ -279,7 +279,7 @@ class _TuTiCardMobileState extends ConsumerState<TuTiCardMobile> {
         ),
       ),
       child: const CircleAvatar(
-        radius: 25,
+        radius: 20,
         backgroundImage: AssetImage('assets/images/fruit.png'),
         backgroundColor: Colors.transparent,
       ),
