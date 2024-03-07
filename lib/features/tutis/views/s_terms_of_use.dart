@@ -46,32 +46,35 @@ class TermsOfUseScreen extends StatelessWidget {
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
-        body: Column(
-          children: [
-            const TuTiHeaderMobile(),
-            TabBar(
-              indicatorColor: ColorConstants.primaryColor,
-              labelColor: ColorConstants.primaryColor,
-              dividerColor: ColorConstants.primaryColor,
-              tabs: tabs.map((String name) => Text(name)).toList(),
-            ),
-            Flexible(
-              flex: 11,
-              child: TabBarView(
-                children: companyInfos
-                    .map((CompanyInfo info) => CompanyInfoCard(
-                          title: info.title,
-                          contents: info.contents,
-                          onTap: info.onTap,
-                        ))
-                    .toList(),
+        body: Container(
+          constraints: BoxConstraints(maxWidth: 700.w),
+          child: Column(
+            children: [
+              const TuTiHeaderMobile(),
+              TabBar(
+                indicatorColor: ColorConstants.primaryColor,
+                labelColor: ColorConstants.primaryColor,
+                dividerColor: ColorConstants.primaryColor,
+                tabs: tabs.map((String name) => Text(name)).toList(),
               ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Container(),
-            ),
-          ],
+              Flexible(
+                flex: 11,
+                child: TabBarView(
+                  children: companyInfos
+                      .map((CompanyInfo info) => CompanyInfoCard(
+                            title: info.title,
+                            contents: info.contents,
+                            onTap: info.onTap,
+                          ))
+                      .toList(),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Container(),
+              ),
+            ],
+          ),
         ),
       ),
     );

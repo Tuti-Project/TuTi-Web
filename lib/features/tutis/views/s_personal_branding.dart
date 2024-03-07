@@ -31,7 +31,7 @@ class PersonalBrandingScreen extends ConsumerWidget {
       title: '트티',
       contents: '기업명: (주) 이쿠아\n 주소: 서울 강남구 테헤란로22길 15 2층\n 전화: 010.7415.8850',
       onTap: () {
-        String urlPath = 'info.tuti20.com';
+        String urlPath = 'https://info.tuti20.com';
         launchUrl(
           Uri.parse(urlPath),
         );
