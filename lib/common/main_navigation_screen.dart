@@ -10,7 +10,7 @@ import 'package:tuti/features/profile/views/profile_screen.dart';
 import 'package:tuti/features/tutis/views/tuti_screen.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/tuti_login_dialog.dart';
 
-import '../features/tutis/views/personal_branding_screen.dart';
+import '../features/tutis/views/s_personal_branding.dart';
 
 class MainNavigationScreen extends ConsumerStatefulWidget {
   static const routeName = 'mainNavigation';

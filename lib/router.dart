@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tuti/common/service/tab_provider.dart';
 import 'package:tuti/features/tutis/views/home_screen.dart';
+import 'package:tuti/features/tutis/views/s_terms_of_use.dart';
 import 'package:tuti/features/tutis/views/tuti_screen.dart';
 
 import 'common/main_navigation_screen.dart';
@@ -82,6 +83,10 @@ final routerProvider = Provider((ref) {
           ),
         ],
       ),
+      GoRoute(
+          name: TermsOfUseScreen.routeName,
+          path: TermsOfUseScreen.routePath,
+          builder: (context, state) => const TermsOfUseScreen()),
     ],
   );
 });

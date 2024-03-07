@@ -3,22 +3,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tuti/constants/gaps.dart';
 
 class CompanyInfoCard extends StatelessWidget {
-  const CompanyInfoCard(
-      {super.key,
-      required this.title,
-      required this.contents,
-      this.subContents,
-      this.subTitle});
+  const CompanyInfoCard({
+    super.key,
+    required this.title,
+    required this.contents,
+    this.subContents,
+    this.subTitle,
+    this.onTap,
+  });
 
   final String title;
   final String contents;
   final String? subTitle;
   final String? subContents;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(20.w),
         margin: EdgeInsets.symmetric(horizontal: 45.w, vertical: 8.h),

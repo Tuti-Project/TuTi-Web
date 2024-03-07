@@ -13,18 +13,20 @@ class TuTiBanner extends ConsumerWidget {
       {super.key,
       required this.onTap,
       required this.title,
-      required this.subtitle});
+      required this.subtitle,
+      this.margin});
 
   final VoidCallback onTap;
   final String title;
   final String subtitle;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10.w),
+        margin: margin ?? EdgeInsets.symmetric(horizontal: 10.w),
         padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 10.h),
         height: 80.h,
         decoration: ShapeDecoration(
