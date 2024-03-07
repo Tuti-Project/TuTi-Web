@@ -9,7 +9,7 @@ import 'package:tuti/common/service/navigation_index_provder.dart';
 import 'package:tuti/common/service/token_provider.dart';
 import 'package:tuti/common/tuti_icon.dart';
 import 'package:tuti/features/profile/models/member_model.dart';
-import 'package:tuti/features/tutis/views/personal_branding_screen.dart';
+import 'package:tuti/features/tutis/views/s_personal_branding.dart';
 import 'package:tuti/features/tutis/widgets/tuti_button_widget.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/main_banner.dart';
 import 'package:tuti/features/tutis/widgets/tuti_widgets/tuti_login_dialog.dart';

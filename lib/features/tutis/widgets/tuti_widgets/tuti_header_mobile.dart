@@ -20,9 +20,7 @@ import '../../../../common/tuti_text.dart';
 import '../../../../constants/gaps.dart';
 
 class TuTiHeaderMobile extends ConsumerStatefulWidget {
-  const TuTiHeaderMobile({
-    super.key,
-  });
+  const TuTiHeaderMobile({super.key});
 
   @override
   ConsumerState<TuTiHeaderMobile> createState() => _TuTiHeaderMobileState();
